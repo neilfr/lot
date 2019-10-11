@@ -1,0 +1,9 @@
+.jumbotron {
+  /* height: 100,
+    clear: "both",
+    paddingTop: 10,
+    textAlign: "center" */
+  clear: "both";
+  padding: 1em;
+  text-align: "center";
+}
