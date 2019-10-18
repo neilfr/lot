@@ -7,6 +7,7 @@ import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
 import { LotEntry } from "../components/LotEntry";
+import { LotForm } from "../components/LotForm";
 
 class Admin extends Component {
   state = {
@@ -36,8 +37,10 @@ class Admin extends Component {
 
   handleInputChange = event => {
     const { name, value } = event.target;
+    const lotEntry = this.state.currentLot;
+    lotEntry[name] = value;
     this.setState({
-      [name]: value
+      currentLot: lotEntry
     });
   };
 
@@ -69,6 +72,17 @@ class Admin extends Component {
       currentLot: newLot[0],
       display: "detail"
     });
+  };
+
+  updateLotEntry = () => {
+    console.log("calling api.updatelotentry with:", this.state.currentLot);
+    API.updateLotEntry(this.state.currentLot)
+      .then(res => {
+        console.log("response from updateLotEntry:", res.data);
+      })
+      .then(() => {
+        this.loadLotData();
+      });
   };
 
   render() {
@@ -104,13 +118,12 @@ class Admin extends Component {
         );
       case "detail":
         return (
-          <div className="col">
-            <h1>Detail</h1>
-            <div>
-              {this.state.currentLot.name}
-              {this.state.currentLot.capacity}
-            </div>
-          </div>
+          <LotForm
+            lot={this.state.currentLot}
+            onChange={this.handleInputChange}
+            updateLotEntry={this.updateLotEntry}
+            cancelClick={this.loadLotData}
+          />
         );
     }
   }

@@ -4,6 +4,10 @@ export default {
   getLots: function() {
     return axios.get("/api/lots");
   },
+  updateLotEntry: function(lotEntry) {
+    console.log("in api, update lot entry:", JSON.stringify(lotEntry));
+    return axios.put("/api/lots/", lotEntry);
+  },
   // Gets all books
   getBooks: function() {
     return axios.get("/api/books");

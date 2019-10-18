@@ -22,7 +22,12 @@ module.exports = {
   //     .catch(err => res.status(422).json(err));
   // },
   update: function(req, res) {
-    db.Lot.findOneAndUpdate({ _id: req.params.id }, req.body)
+    console.log("inside lotscontroller");
+    console.log("req.params.id", req.params.id);
+    console.log("req.body", req.body);
+    // db.Lot.findOneAndUpdate({ _id: req.params.id }, req.body)
+    db.Lot.findOneAndUpdate(req.body._id, req.body)
+
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   }
