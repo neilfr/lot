@@ -7,7 +7,11 @@ export function LotEntry(props) {
   return (
     <div className="row">
       {/* <li className="list-group-item col-10" onClick={props.setCurrentLogEntry}> */}
-      <li className="list-group-item col-10" onClick={props.setCurrentLot}>
+      <li
+        className="list-group-item col-10"
+        onClick={props.setCurrentLot}
+        value={props.value}
+      >
         Name:{props.name}
         <br />
         Capacity:{props.capacity}

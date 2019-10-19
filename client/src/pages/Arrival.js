@@ -10,6 +10,7 @@ import { Input, TextArea, FormBtn } from "../components/Form";
 class Arrival extends Component {
   state = {
     lots: [],
+    currentLot: null,
     display: "list"
   };
 
@@ -26,38 +27,43 @@ class Arrival extends Component {
       .catch(err => console.log("error loading lot data"));
   };
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
-      .catch(err => console.log(err));
-  };
-
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-
-  handleFormSubmit = event => {
-    event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
-    }
+  setCurrentLot = event => {
+    console.log("setting current lot");
+    console.log("lot index is:", event.target.value);
+    this.setState({ currentLot: event.target.value, display: "detail" });
   };
 
   render() {
-    return (
-      <div className="col">
-        <h1>Arrival</h1>
-      </div>
-    );
+    switch (this.state.display) {
+      case "list":
+        return (
+          <Container fluid>
+            <Col size="md-12">
+              <Jumbotron>
+                <h1>Lot Picker</h1>
+              </Jumbotron>
+              {this.state.lots.length ? (
+                <select onChange={this.setCurrentLot} name="currentLot">
+                  {this.state.lots.map((lot, index) => (
+                    <option value={index}>{lot.name}</option>
+                  ))}
+                </select>
+              ) : (
+                <h3>No Lots, Go to Admin to Add Lots</h3>
+              )}
+            </Col>
+          </Container>
+        );
+      case "detail":
+        return (
+          <div>
+            <Jumbotron>
+              <h1>Lot selected</h1>
+              {this.state.lots[this.state.currentLot].name}
+            </Jumbotron>
+          </div>
+        );
+    }
   }
 }
 

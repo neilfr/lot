@@ -51,22 +51,30 @@ class Admin extends Component {
     }
   };
 
-  setCurrentLot = lotId => {
-    console.log("setting current lot");
-    console.log("lotid", lotId);
-    const newLot = this.state.lots.filter(lot => {
-      console.log("lot._Id", lot._id);
-      console.log("lotid", lotId);
-      if (lot._id === lotId) {
-        return lot;
-      }
-    });
-    console.log("newLot is", newLot);
-    this.setState({
-      currentLot: newLot[0],
-      display: "detail"
-    });
+  setCurrentLot = event => {
+    console.log("event.target is:", event.target);
+    console.log("event.target.value is:", event.target.value);
+    const selectedLot = this.state.lots[event.target.value];
+    console.log("selected lot is:", selectedLot);
+    this.setState({ currentLot: selectedLot, display: "detail" });
   };
+
+  // setCurrentLot = lotId => {
+  //   console.log("setting current lot");
+  //   console.log("lotid", lotId);
+  //   const newLot = this.state.lots.filter(lot => {
+  //     console.log("lot._Id", lot._id);
+  //     console.log("lotid", lotId);
+  //     if (lot._id === lotId) {
+  //       return lot;
+  //     }
+  //   });
+  //   console.log("newLot is", newLot);
+  //   this.setState({
+  //     currentLot: newLot[0],
+  //     display: "detail"
+  //   });
+  // };
 
   deleteLotEntry = lot => {
     console.log("DELETING LOT:", lot);
@@ -119,12 +127,14 @@ class Admin extends Component {
               <button onClick={this.addLotEntry}>Add New Lot</button>
               {this.state.lots.length ? (
                 <List>
-                  {this.state.lots.map(lot => (
+                  {this.state.lots.map((lot, index) => (
                     <LotEntry
                       key={lot._id}
-                      setCurrentLot={() => this.setCurrentLot(lot._id)}
+                      // setCurrentLot={() => this.setCurrentLot(lot._id)}
+                      setCurrentLot={this.setCurrentLot}
                       name={lot.name}
                       capacity={lot.capacity}
+                      value={index}
                     />
                   ))}
                 </List>
