@@ -25,6 +25,13 @@ export function LotForm(props) {
         />
         <button onClick={props.updateLotEntry}>Save</button>
         <button onClick={props.cancelClick}>Cancel</button>
+        <button
+          onClick={() => {
+            props.deleteClick(props.lot);
+          }}
+        >
+          Delete
+        </button>
       </div>
     );
   }

@@ -29,12 +29,6 @@ class Admin extends Component {
       .catch(err => console.log("error loading lot data"));
   };
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
-      .catch(err => console.log(err));
-  };
-
   handleInputChange = event => {
     const { name, value } = event.target;
     const lotEntry = this.state.currentLot;
@@ -74,6 +68,32 @@ class Admin extends Component {
     });
   };
 
+  deleteLotEntry = lot => {
+    console.log("DELETING LOT:", lot);
+    console.log("LOT._ID IS:", lot._id);
+    API.deleteLotEntry(lot._id)
+      .then(res => this.loadLotData())
+      .catch(err => console.log(err));
+  };
+
+  addLotEntry = () => {
+    const lotEntry = {
+      name: "update name",
+      capacity: 0,
+      feeFormula: "tbd"
+    };
+    API.addLotEntry(lotEntry).then(res => {
+      console.log("response from addLotEntry:", res.data);
+      this.setState({
+        currentLot: res.data,
+        display: "detail"
+      });
+    });
+    // .then(() => {
+    //   this.loadLotData();
+    // });
+  };
+
   updateLotEntry = () => {
     console.log("calling api.updatelotentry with:", this.state.currentLot);
     const currentLot = this.state.currentLot;
@@ -96,6 +116,7 @@ class Admin extends Component {
               <Jumbotron>
                 <h1>Lot List</h1>
               </Jumbotron>
+              <button onClick={this.addLotEntry}>Add New Lot</button>
               {this.state.lots.length ? (
                 <List>
                   {this.state.lots.map(lot => (
@@ -104,14 +125,11 @@ class Admin extends Component {
                       setCurrentLot={() => this.setCurrentLot(lot._id)}
                       name={lot.name}
                       capacity={lot.capacity}
-                    >
-                      {/* Name:{lot.name}
-                        Capacity:{lot.capacity} */}
-                    </LotEntry>
+                    />
                   ))}
                 </List>
               ) : (
-                <h3>No Results to Display</h3>
+                <h3>No Lots to Display</h3>
               )}
             </Col>
           </Container>
@@ -127,6 +145,7 @@ class Admin extends Component {
               onChange={this.handleInputChange}
               updateLotEntry={this.updateLotEntry}
               cancelClick={this.loadLotData}
+              deleteClick={this.deleteLotEntry}
             />
           </div>
         );

@@ -17,11 +17,11 @@ module.exports = {
   //     .then(dbModel => res.json(dbModel))
   //     .catch(err => res.status(422).json(err));
   // },
-  // create: function(req, res) {
-  //   db.Book.create(req.body)
-  //     .then(dbModel => res.json(dbModel))
-  //     .catch(err => res.status(422).json(err));
-  // },
+  create: function(req, res) {
+    db.Lot.create(req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
   update: function(req, res) {
     console.log("INSIDE LOT CONTROLLER!!!!");
     // console.log("req.params.id", req.params.id);
@@ -37,13 +37,12 @@ module.exports = {
         console.log("err is:", err);
         res.status(422).json(err);
       });
-  }
+  },
 
-  // ,
-  // remove: function(req, res) {
-  //   db.Book.findById({ _id: req.params.id })
-  //     .then(dbModel => dbModel.remove())
-  //     .then(dbModel => res.json(dbModel))
-  //     .catch(err => res.status(422).json(err));
-  // }
+  remove: function(req, res) {
+    db.Lot.findById({ _id: req.params.id })
+      .then(dbModel => dbModel.remove())
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  }
 };
