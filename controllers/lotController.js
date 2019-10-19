@@ -1,8 +1,9 @@
 const db = require("../models");
 
-// Defining methods for the lotsController
+// Defining methods for the lotController
 module.exports = {
   findAll: function(req, res) {
+    console.log("INSIDE FIND ALL!!!!");
     db.Lot.find(req.query)
       .then(dbModel => {
         console.log("getting lot data");
@@ -22,15 +23,22 @@ module.exports = {
   //     .catch(err => res.status(422).json(err));
   // },
   update: function(req, res) {
-    console.log("inside lotscontroller");
-    console.log("req.params.id", req.params.id);
+    console.log("INSIDE LOT CONTROLLER!!!!");
+    // console.log("req.params.id", req.params.id);
     console.log("req.body", req.body);
-    // db.Lot.findOneAndUpdate({ _id: req.params.id }, req.body)
-    db.Lot.findOneAndUpdate(req.body._id, req.body)
+    console.log("id is", req.params.id);
+    db.Lot.findOneAndUpdate({ _id: req.params.id }, req.body)
+      // db.Lot.findOneAndUpdate(req.body._id, req.body)
 
       .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+      // .catch(err => res.status(422).json(err));
+      .catch(err => {
+        console.log("error!");
+        console.log("err is:", err);
+        res.status(422).json(err);
+      });
   }
+
   // ,
   // remove: function(req, res) {
   //   db.Book.findById({ _id: req.params.id })

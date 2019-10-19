@@ -2,11 +2,12 @@ import axios from "axios";
 
 export default {
   getLots: function() {
-    return axios.get("/api/lots");
+    return axios.get("/api/lot");
   },
-  updateLotEntry: function(lotEntry) {
+  updateLotEntry: function(id, lotEntry) {
     console.log("in api, update lot entry:", JSON.stringify(lotEntry));
-    return axios.put("/api/lots/", lotEntry);
+    console.log("in api, id is:", id);
+    return axios.put("/api/lot/" + id, lotEntry);
   },
   // Gets all books
   getBooks: function() {

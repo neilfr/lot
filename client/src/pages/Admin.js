@@ -76,7 +76,9 @@ class Admin extends Component {
 
   updateLotEntry = () => {
     console.log("calling api.updatelotentry with:", this.state.currentLot);
-    API.updateLotEntry(this.state.currentLot)
+    const currentLot = this.state.currentLot;
+    console.log("current lot id is:", currentLot._id);
+    API.updateLotEntry(currentLot._id, currentLot)
       .then(res => {
         console.log("response from updateLotEntry:", res.data);
       })
@@ -90,40 +92,43 @@ class Admin extends Component {
       case "list":
         return (
           <Container fluid>
-            <Row>
-              <Col size="md-12">
-                <Jumbotron>
-                  <h1>Lot List</h1>
-                </Jumbotron>
-                {this.state.lots.length ? (
-                  <List>
-                    {this.state.lots.map(lot => (
-                      <LotEntry
-                        key={lot._id}
-                        setCurrentLot={() => this.setCurrentLot(lot._id)}
-                        name={lot.name}
-                        capacity={lot.capacity}
-                      >
-                        {/* Name:{lot.name}
+            <Col size="md-12">
+              <Jumbotron>
+                <h1>Lot List</h1>
+              </Jumbotron>
+              {this.state.lots.length ? (
+                <List>
+                  {this.state.lots.map(lot => (
+                    <LotEntry
+                      key={lot._id}
+                      setCurrentLot={() => this.setCurrentLot(lot._id)}
+                      name={lot.name}
+                      capacity={lot.capacity}
+                    >
+                      {/* Name:{lot.name}
                         Capacity:{lot.capacity} */}
-                      </LotEntry>
-                    ))}
-                  </List>
-                ) : (
-                  <h3>No Results to Display</h3>
-                )}
-              </Col>
-            </Row>
+                    </LotEntry>
+                  ))}
+                </List>
+              ) : (
+                <h3>No Results to Display</h3>
+              )}
+            </Col>
           </Container>
         );
       case "detail":
         return (
-          <LotForm
-            lot={this.state.currentLot}
-            onChange={this.handleInputChange}
-            updateLotEntry={this.updateLotEntry}
-            cancelClick={this.loadLotData}
-          />
+          <div>
+            <Jumbotron>
+              <h1>Lot Update</h1>
+            </Jumbotron>
+            <LotForm
+              lot={this.state.currentLot}
+              onChange={this.handleInputChange}
+              updateLotEntry={this.updateLotEntry}
+              cancelClick={this.loadLotData}
+            />
+          </div>
         );
     }
   }
