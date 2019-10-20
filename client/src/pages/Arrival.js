@@ -12,7 +12,6 @@ class Arrival extends Component {
     lots: [],
     currentLotIndex: null,
     display: "list",
-    gate: "Closed",
     vacancies: null,
     tenant: null
   };
@@ -38,10 +37,26 @@ class Arrival extends Component {
         console.log(res.data);
         this.setState({ tenant: res.data });
       })
+      .then(res => {
+        this.updateVacancyCount(this.state.currentLotIndex);
+      })
       .catch(err => console.log("error getting ticket"));
   };
 
-  setCurrentLot = event => {
+  updateVacancyCount = lotIndex => {
+    API.getVacancyCount(this.state.lots[lotIndex]._id)
+      .then(res => {
+        console.log("res is:", res);
+        console.log("VACANCY COUNT IS:", res.data);
+        // const vacancies = 5;
+        this.setState({
+          vacancies: res.data
+        });
+      })
+      .catch(err => console.log("error getting vacancies"));
+  };
+
+  updateCurrentLot = event => {
     console.log("setting current lot");
     const lotIndex = event.target.value;
     console.log("lot index is:", lotIndex);
@@ -69,7 +84,7 @@ class Arrival extends Component {
                 <h1>Lot Picker</h1>
               </Jumbotron>
               {this.state.lots.length ? (
-                <select onChange={this.setCurrentLot} name="currentLotIndex">
+                <select onChange={this.updateCurrentLot} name="currentLotIndex">
                   {this.state.lots.map((lot, index) => (
                     <option key={index} value={index}>
                       {lot.name}
@@ -90,7 +105,6 @@ class Arrival extends Component {
               {this.state.lots[this.state.currentLotIndex].name}
             </Jumbotron>
             <p>Vacancies:{this.state.vacancies}</p>
-            <p>Gate closed</p>
             <p>rate information</p>
             <button
               disabled={!(this.state.vacancies > 0)}
@@ -109,7 +123,6 @@ class Arrival extends Component {
                   <div></div>
                 )}
               </p>
-              <button>take ticket</button>
             </div>
             {/* <p>arrival time:{this.state.tenant.arrival}</p> */}
           </div>
