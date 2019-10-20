@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const lotSchema = new Schema({
   name: String,
   capacity: Number,
-  feeFormula: String
+  feeFormula: String,
+  tenants: []
 });
 
 const Lot = mongoose.model("Lot", lotSchema);

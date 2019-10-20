@@ -59,23 +59,6 @@ class Admin extends Component {
     this.setState({ currentLot: selectedLot, display: "detail" });
   };
 
-  // setCurrentLot = lotId => {
-  //   console.log("setting current lot");
-  //   console.log("lotid", lotId);
-  //   const newLot = this.state.lots.filter(lot => {
-  //     console.log("lot._Id", lot._id);
-  //     console.log("lotid", lotId);
-  //     if (lot._id === lotId) {
-  //       return lot;
-  //     }
-  //   });
-  //   console.log("newLot is", newLot);
-  //   this.setState({
-  //     currentLot: newLot[0],
-  //     display: "detail"
-  //   });
-  // };
-
   deleteLotEntry = lot => {
     console.log("DELETING LOT:", lot);
     console.log("LOT._ID IS:", lot._id);
@@ -130,7 +113,6 @@ class Admin extends Component {
                   {this.state.lots.map((lot, index) => (
                     <LotEntry
                       key={lot._id}
-                      // setCurrentLot={() => this.setCurrentLot(lot._id)}
                       setCurrentLot={this.setCurrentLot}
                       name={lot.name}
                       capacity={lot.capacity}

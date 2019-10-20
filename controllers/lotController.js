@@ -1,3 +1,4 @@
+const Moment = require("moment");
 const db = require("../models");
 
 // Defining methods for the lotController
@@ -44,5 +45,27 @@ module.exports = {
       .then(dbModel => dbModel.remove())
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
+  },
+
+  getNewTenant: function(req, res) {
+    console.log("INSIDE GETNEWTENANT!!");
+    console.log("REQ.PARAMS.ID IS:", req.params.lotId);
+    const now = new Date();
+    const newTenant = {
+      ticket: Moment(now).format("x"),
+      arrival: Moment(now).format("YYYY-MM-DD HH:mm"),
+      payment: null,
+      departure: null
+    };
+    db.Lot.findByIdAndUpdate(
+      req.params.lotId,
+      // { name: "tada!" },
+      { $push: { tenants: { newTenant } } },
+      () => {
+        // res.send({ hellores: "worldres" });
+        res.send({ newTenant });
+      }
+      // {$push: {ticket:{ticketNum:1,arrival:"now"}}}
+    );
   }
 };

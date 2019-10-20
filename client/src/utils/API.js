@@ -19,6 +19,13 @@ export default {
     console.log("id is:", id);
     return axios.delete("/api/lot/" + id);
   },
+
+  getNewTenant: function(lotId) {
+    console.log("INSIDE ADD TENANT");
+    console.log("lotId is:", lotId);
+    return axios.get("api/lot/tenant/" + lotId);
+  },
+
   // Gets all books
   getBooks: function() {
     return axios.get("/api/books");

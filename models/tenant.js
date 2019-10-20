@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const tenantSchema = new Schema({
   ticket: String,
   arrival: Date,
-  checkout: Date,
+  payment: Date,
   departure: Date
 });
 

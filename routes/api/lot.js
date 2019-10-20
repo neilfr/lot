@@ -10,5 +10,6 @@ router
   .route("/:id")
   .put(lotController.update)
   .delete(lotController.remove);
+router.route("/tenant/:lotId").get(lotController.getNewTenant);
 
 module.exports = router;

@@ -10,7 +10,7 @@ import { Input, TextArea, FormBtn } from "../components/Form";
 class Arrival extends Component {
   state = {
     lots: [],
-    currentLot: null,
+    currentLotIndex: null,
     display: "list"
   };
 
@@ -27,10 +27,20 @@ class Arrival extends Component {
       .catch(err => console.log("error loading lot data"));
   };
 
-  setCurrentLot = event => {
+  ticketPlease = () => {
+    console.log("INSIDE TICKET PLEASE");
+    API.getNewTenant(this.state.lots[this.state.currentLotIndex]._id)
+      .then(res => {
+        console.log("GET NEW TENANT RESPONSE");
+        console.log(res.data);
+      })
+      .catch(err => console.log("error getting ticket"));
+  };
+
+  setCurrentLotIndex = event => {
     console.log("setting current lot");
     console.log("lot index is:", event.target.value);
-    this.setState({ currentLot: event.target.value, display: "detail" });
+    this.setState({ currentLotIndex: event.target.value, display: "detail" });
   };
 
   render() {
@@ -43,9 +53,14 @@ class Arrival extends Component {
                 <h1>Lot Picker</h1>
               </Jumbotron>
               {this.state.lots.length ? (
-                <select onChange={this.setCurrentLot} name="currentLot">
+                <select
+                  onChange={this.setCurrentLotIndex}
+                  name="currentLotIndex"
+                >
                   {this.state.lots.map((lot, index) => (
-                    <option value={index}>{lot.name}</option>
+                    <option key={index} value={index}>
+                      {lot.name}
+                    </option>
                   ))}
                 </select>
               ) : (
@@ -59,8 +74,16 @@ class Arrival extends Component {
           <div>
             <Jumbotron>
               <h1>Lot selected</h1>
-              {this.state.lots[this.state.currentLot].name}
+              {this.state.lots[this.state.currentLotIndex].name}
             </Jumbotron>
+            <p>Gate closed</p>
+            <p>rate information</p>
+            <button onClick={this.ticketPlease}>press for ticket</button>
+            <div>
+              <p>click this ticket to take it</p>
+              <p>ticket #</p>
+            </div>
+            <p>date/time</p>
           </div>
         );
     }
