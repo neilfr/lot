@@ -13,7 +13,8 @@ class Arrival extends Component {
     currentLotIndex: null,
     display: "list",
     gate: "Closed",
-    vacancies: null
+    vacancies: null,
+    tenant: null
   };
 
   componentDidMount() {
@@ -35,6 +36,7 @@ class Arrival extends Component {
       .then(res => {
         console.log("GET NEW TENANT RESPONSE");
         console.log(res.data);
+        this.setState({ tenant: res.data });
       })
       .catch(err => console.log("error getting ticket"));
   };
@@ -87,14 +89,29 @@ class Arrival extends Component {
               <h1>Lot selected</h1>
               {this.state.lots[this.state.currentLotIndex].name}
             </Jumbotron>
+            <p>Vacancies:{this.state.vacancies}</p>
             <p>Gate closed</p>
             <p>rate information</p>
-            <button onClick={this.ticketPlease}>press for ticket</button>
+            <button
+              disabled={!(this.state.vacancies > 0)}
+              onClick={this.ticketPlease}
+            >
+              press for ticket
+            </button>
             <div>
-              <p>click this ticket to take it</p>
-              <p>ticket #</p>
+              <p>
+                {this.state.tenant ? (
+                  <div>
+                    <p>ticket #:{this.state.tenant.ticket}</p>
+                    <p>ticket issued:{this.state.tenant.arrival}</p>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+              </p>
+              <button>take ticket</button>
             </div>
-            <p>date/time</p>
+            {/* <p>arrival time:{this.state.tenant.arrival}</p> */}
           </div>
         );
     }
