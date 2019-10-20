@@ -47,25 +47,49 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
 
+  getVacancyCount: function(req, res) {
+    console.log("In GETVACANCY COUNT");
+    db.Lot.findById(req.params.lotId, "capacity tenants")
+      .then(lot => {
+        console.log("RES IS:", lot);
+        console.log("CAPACITY IS:", lot.capacity);
+        console.log("TENANTS IS:", lot.tenants);
+        const vacancies = lot.capacity - lot.tenants.length;
+        res.json(vacancies);
+      })
+      .catch(err => res.status(422).json(err));
+  },
+
   getNewTenant: function(req, res) {
     console.log("INSIDE GETNEWTENANT!!");
     console.log("REQ.PARAMS.ID IS:", req.params.lotId);
-    const now = new Date();
-    const newTenant = {
-      ticket: Moment(now).format("x"),
-      arrival: Moment(now).format("YYYY-MM-DD HH:mm"),
-      payment: null,
-      departure: null
-    };
-    db.Lot.findByIdAndUpdate(
-      req.params.lotId,
-      // { name: "tada!" },
-      { $push: { tenants: { newTenant } } },
-      () => {
-        // res.send({ hellores: "worldres" });
-        res.send({ newTenant });
-      }
-      // {$push: {ticket:{ticketNum:1,arrival:"now"}}}
-    );
+
+    db.Lot.findById(req.params.lotId, "capacity tenants")
+      .then(lot => {
+        console.log("RES IS:", lot);
+        console.log("CAPACITY IS:", lot.capacity);
+        console.log("TENANTS IS:", lot.tenants);
+        const vacancies = lot.capacity - lot.tenants.length;
+        if (vacancies > 0) {
+          const now = new Date();
+          const newTenant = {
+            ticket: Moment(now).format("x"),
+            arrival: Moment(now).format("YYYY-MM-DD HH:mm"),
+            payment: null,
+            departure: null
+          };
+          db.Lot.findByIdAndUpdate(
+            req.params.lotId,
+            { $push: { tenants: { newTenant } } },
+            () => {
+              res.json(newTenant);
+            }
+          );
+        } else {
+          res.json(null);
+          console.log("no room left");
+        }
+      })
+      .catch(err => res.status(422).json(err));
   }
 };

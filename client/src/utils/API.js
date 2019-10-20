@@ -19,7 +19,11 @@ export default {
     console.log("id is:", id);
     return axios.delete("/api/lot/" + id);
   },
-
+  getVacancyCount: function(lotId) {
+    console.log("INSIDE GET VACANCY COUNT:");
+    console.log("lotId is:", lotId);
+    return axios.get("api/lot/vacancies/" + lotId);
+  },
   getNewTenant: function(lotId) {
     console.log("INSIDE ADD TENANT");
     console.log("lotId is:", lotId);

@@ -11,14 +11,16 @@ class Arrival extends Component {
   state = {
     lots: [],
     currentLotIndex: null,
-    display: "list"
+    display: "list",
+    gate: "Closed",
+    vacancies: null
   };
 
   componentDidMount() {
-    this.loadLotData();
+    this.loadLots();
   }
 
-  loadLotData = () => {
+  loadLots = () => {
     API.getLots()
       .then(res => {
         console.log("loading lot data:", res.data);
@@ -37,10 +39,22 @@ class Arrival extends Component {
       .catch(err => console.log("error getting ticket"));
   };
 
-  setCurrentLotIndex = event => {
+  setCurrentLot = event => {
     console.log("setting current lot");
-    console.log("lot index is:", event.target.value);
-    this.setState({ currentLotIndex: event.target.value, display: "detail" });
+    const lotIndex = event.target.value;
+    console.log("lot index is:", lotIndex);
+    API.getVacancyCount(this.state.lots[lotIndex]._id)
+      .then(res => {
+        console.log("res is:", res);
+        console.log("VACANCY COUNT IS:", res.data);
+        // const vacancies = 5;
+        this.setState({
+          currentLotIndex: lotIndex,
+          vacancies: res.data,
+          display: "detail"
+        });
+      })
+      .catch(err => console.log("error getting vacancies"));
   };
 
   render() {
@@ -53,10 +67,7 @@ class Arrival extends Component {
                 <h1>Lot Picker</h1>
               </Jumbotron>
               {this.state.lots.length ? (
-                <select
-                  onChange={this.setCurrentLotIndex}
-                  name="currentLotIndex"
-                >
+                <select onChange={this.setCurrentLot} name="currentLotIndex">
                   {this.state.lots.map((lot, index) => (
                     <option key={index} value={index}>
                       {lot.name}
