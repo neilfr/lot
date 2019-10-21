@@ -9,11 +9,11 @@ function Nav() {
       <a className="navbar-brand" href="/arrival">
         Arrival
       </a>
-      <a className="navbar-brand" href="/departure">
-        Departure
-      </a>
       <a className="navbar-brand" href="/payment">
         Payment
+      </a>
+      <a className="navbar-brand" href="/departure">
+        Departure
       </a>
     </nav>
   );

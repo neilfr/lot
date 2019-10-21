@@ -60,6 +60,16 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
 
+  findTenantByTicket: function(req, res) {
+    console.log("IN FIND TENANT BY ID");
+    console.log("req.params.lotId is:", req.params.lotId);
+    console.log("req.params.ticket is:", req.params.ticket);
+    res.json("hello");
+    db.Lot.findByIdAndUpdate(req.params.lotId, {
+      $pull: { tenants: { ticket: "1571618449397" } }
+    });
+  },
+
   getNewTenant: function(req, res) {
     console.log("INSIDE GETNEWTENANT!!");
     console.log("REQ.PARAMS.ID IS:", req.params.lotId);
@@ -80,7 +90,9 @@ module.exports = {
           };
           db.Lot.findByIdAndUpdate(
             req.params.lotId,
-            { $push: { tenants: { newTenant } } },
+            // { $push: { tenants: { newTenant } } },
+            { $push: { tenants: newTenant } },
+
             () => {
               res.json(newTenant);
             }

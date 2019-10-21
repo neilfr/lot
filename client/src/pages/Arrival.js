@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
 
 class Arrival extends Component {
   state = {
@@ -101,7 +97,7 @@ class Arrival extends Component {
         return (
           <div>
             <Jumbotron>
-              <h1>Lot selected</h1>
+              <h1>Arrival: Lot selected</h1>
               {this.state.lots[this.state.currentLotIndex].name}
             </Jumbotron>
             <p>Vacancies:{this.state.vacancies}</p>
@@ -124,7 +120,6 @@ class Arrival extends Component {
                 )}
               </p>
             </div>
-            {/* <p>arrival time:{this.state.tenant.arrival}</p> */}
           </div>
         );
     }

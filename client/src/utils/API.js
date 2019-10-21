@@ -24,6 +24,12 @@ export default {
     console.log("lotId is:", lotId);
     return axios.get("api/lot/vacancies/" + lotId);
   },
+  getTenantByTicket: function(lotId, ticket) {
+    console.log("INSIDE GETTENANTBYTICKET");
+    console.log("ticket is:", ticket);
+    return axios.get("api/lot/tenant/" + lotId + "/" + ticket);
+  },
+
   getNewTenant: function(lotId) {
     console.log("INSIDE ADD TENANT");
     console.log("lotId is:", lotId);
