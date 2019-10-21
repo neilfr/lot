@@ -1,6 +1,10 @@
 const Moment = require("moment");
 const db = require("../models");
 
+const fee = () => {
+  const x = 100;
+  return x;
+};
 // Defining methods for the lotController
 module.exports = {
   findAll: function(req, res) {
@@ -60,15 +64,36 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
 
-  findTenantByTicket: function(req, res) {
-    console.log("IN FIND TENANT BY ID");
-    console.log("req.params.lotId is:", req.params.lotId);
+  getFee: function(req, res) {
+    console.log("INSIDE GETFEE");
     console.log("req.params.ticket is:", req.params.ticket);
-    res.json("hello");
-    db.Lot.findByIdAndUpdate(req.params.lotId, {
-      $pull: { tenants: { ticket: "1571618449397" } }
+    const ticket = req.params.ticket;
+    console.log("req.params.lotid is:", req.params.lotId);
+    const lotId = req.params.lotId;
+    db.Lot.findById(lotId, function(err, res) {
+      console.log("res is:", res);
+      const tenants = res.tenants;
+      const x = tenants.find(tenant => {
+        console.log("tenant.ticket:", tenant.ticket);
+        console.log("ticket:", ticket);
+        if (tenant.ticket === ticket) {
+          console.log("returning tenant:", tenant);
+          return tenant;
+        }
+      });
     });
+    res.json(fee());
   },
+  // this is all wrong... but may need the $pull syntax for later
+  // findTenantByTicket: function(req, res) {
+  //   console.log("IN FIND TENANT BY ID");
+  //   console.log("req.params.lotId is:", req.params.lotId);
+  //   console.log("req.params.ticket is:", req.params.ticket);
+  //   res.json("hello");
+  //   db.Lot.findByIdAndUpdate(req.params.lotId, {
+  //     $pull: { tenants: { ticket: "1571618449397" } }
+  //   });
+  // },
 
   getNewTenant: function(req, res) {
     console.log("INSIDE GETNEWTENANT!!");

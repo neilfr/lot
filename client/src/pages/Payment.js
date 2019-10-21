@@ -46,6 +46,14 @@ class Payment extends Component {
 
   getFee = () => {
     console.log("get fee info for ticket:", this.state.ticket);
+    API.getFeeForTicket(
+      this.state.lots[this.state.currentLotIndex]._id,
+      this.state.ticket
+    )
+      .then(res => {
+        console.log("fee response data:", res.data);
+      })
+      .catch(err => console.log("error loading lot data"));
   };
 
   render() {
