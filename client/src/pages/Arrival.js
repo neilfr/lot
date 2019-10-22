@@ -109,16 +109,14 @@ class Arrival extends Component {
               press for ticket
             </button>
             <div>
-              <p>
-                {this.state.tenant ? (
-                  <div>
-                    <p>ticket #:{this.state.tenant.ticket}</p>
-                    <p>ticket issued:{this.state.tenant.arrival}</p>
-                  </div>
-                ) : (
-                  <div></div>
-                )}
-              </p>
+              {this.state.tenant ? (
+                <div>
+                  <p>ticket #:{this.state.tenant.ticket}</p>
+                  <p>ticket issued:{this.state.tenant.arrival}</p>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
         );

@@ -5,7 +5,8 @@ const tenantSchema = new Schema({
   ticket: String,
   arrival: Date,
   payment: Date,
-  departure: Date
+  departure: Date,
+  fee: Number
 });
 
 const Tenant = mongoose.model("Tenant", tenantSchema);

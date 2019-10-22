@@ -1,9 +1,24 @@
 const Moment = require("moment");
 const db = require("../models");
 
-const fee = () => {
-  const x = 100;
-  return x;
+const calculateFee = tenant => {
+  console.log("INSIDE FEE");
+  console.log("TENANT IS:", tenant);
+  const start = Moment.utc(tenant.arrival);
+  const end = Moment.utc(tenant.payment);
+  const duration = end.diff(start, "minutes");
+  // const s =
+  //   duration._data.hours + " hours " + duration._data.minutes + " minutes ";
+
+  // const duration = start.from(end);
+  console.log("DURATION IS:", duration);
+  const hours = Math.floor(duration / 60);
+  const remainingMinutes = duration - hours * 60;
+  const formattedDuration = hours + " hours " + remainingMinutes + " minutes";
+  console.log("FORMATTED DURATION IS:", formattedDuration);
+
+  const fee = 100;
+  return fee;
 };
 // Defining methods for the lotController
 module.exports = {
@@ -78,11 +93,14 @@ module.exports = {
         console.log("ticket:", ticket);
         if (tenant.ticket === ticket) {
           console.log("returning tenant:", tenant);
+          const now = new Date();
+          tenant.payment = Moment(now).format("YYYY-MM-DD HH:mm");
+          tenant.fee = calculateFee(tenant);
           return tenant;
         }
       });
     });
-    res.json(fee());
+    res.json(100);
   },
   // this is all wrong... but may need the $pull syntax for later
   // findTenantByTicket: function(req, res) {
