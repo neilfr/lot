@@ -12,6 +12,6 @@ router
   .delete(lotController.remove);
 router.route("/tenant/:lotId").get(lotController.getNewTenant);
 router.route("/vacancies/:lotId").get(lotController.getVacancyCount);
-router.route("/ticket/:lotId/:ticket").get(lotController.getFee);
+router.route("/ticket/:lotId/:ticket").get(lotController.getTenantPaymentInfo);
 
 module.exports = router;

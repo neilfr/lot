@@ -12,10 +12,10 @@ const calculateFee = tenant => {
 
   // const duration = start.from(end);
   console.log("DURATION IS:", duration);
-  const hours = Math.floor(duration / 60);
-  const remainingMinutes = duration - hours * 60;
-  const formattedDuration = hours + " hours " + remainingMinutes + " minutes";
-  console.log("FORMATTED DURATION IS:", formattedDuration);
+  // const hours = Math.floor(duration / 60);
+  // const remainingMinutes = duration - hours * 60;
+  // const formattedDuration = hours + " hours " + remainingMinutes + " minutes";
+  // console.log("FORMATTED DURATION IS:", formattedDuration);
   if (duration <= 60) {
     console.log("duration was less than 60");
     return 3;
@@ -88,8 +88,8 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
 
-  getFee: function(req, res) {
-    console.log("INSIDE GETFEE");
+  getTenantPaymentInfo: function(req, res) {
+    console.log("INSIDE getTenantPaymentInfo");
     console.log("req.params.ticket is:", req.params.ticket);
     const ticket = req.params.ticket;
     console.log("req.params.lotid is:", req.params.lotId);
@@ -106,13 +106,13 @@ module.exports = {
           console.log("returning tenant:", tenant);
           const now = new Date();
           tenant.payment = Moment(now).format("YYYY-MM-DD HH:mm");
-          fee = calculateFee(tenant);
-          console.log("TENANT FEE IS:", fee);
+          tenant.fee = calculateFee(tenant);
+          console.log("TENANT FEE IS:", tenant.fee);
           return tenant;
         }
       });
-      console.log("res.json(fee)", fee);
-      res.json(fee);
+      console.log("tenant.fee", x.fee);
+      res.json(x);
     });
   },
   // this is all wrong... but may need the $pull syntax for later

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
+import Moment from "moment";
+// const Moment = require("moment");
 
 class Payment extends Component {
   state = {
@@ -9,7 +11,9 @@ class Payment extends Component {
     currentLotIndex: null,
     display: "list",
     ticket: "",
-    tenant: ""
+    tenant: "",
+    duration: "",
+    fee: ""
   };
 
   componentDidMount() {
@@ -44,14 +48,33 @@ class Payment extends Component {
     });
   };
 
-  getFee = () => {
-    console.log("get fee info for ticket:", this.state.ticket);
-    API.getFeeForTicket(
+  getTenantPaymentInfo = () => {
+    console.log("get tenant payment info for ticket:", this.state.ticket);
+    API.getTenantPaymentInfo(
       this.state.lots[this.state.currentLotIndex]._id,
       this.state.ticket
     )
       .then(res => {
-        console.log("fee response data:", res.data);
+        // console.log("tenant payment response data:", res.data);
+        const tenant = res.data;
+        console.log("TENANT IS:", tenant);
+        const start = Moment.utc(tenant.arrival);
+        const end = Moment.utc(tenant.payment);
+        const duration = end.diff(start, "minutes");
+        // const s =
+        //   duration._data.hours + " hours " + duration._data.minutes + " minutes ";
+
+        // const duration = start.from(end);
+        console.log("DURATION IS:", duration);
+        const hours = Math.floor(duration / 60);
+        const remainingMinutes = duration - hours * 60;
+        const formattedDuration =
+          hours + " hours " + remainingMinutes + " minutes";
+        console.log("FORMATTED DURATION IS:", formattedDuration);
+        this.setState({
+          fee: tenant.fee,
+          duration: formattedDuration
+        });
       })
       .catch(err => console.log("error loading lot data"));
   };
@@ -92,7 +115,9 @@ class Payment extends Component {
               type="text"
               onChange={this.handleInputChange}
             />
-            <button onClick={this.getFee}>Submit</button>
+            <button onClick={this.getTenantPaymentInfo}>Submit</button>
+            <div>duration of stay:{this.state.duration}</div>
+            <div>fee:{this.state.fee}</div>
           </div>
         );
     }

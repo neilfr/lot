@@ -31,7 +31,7 @@ export default {
     return axios.get("api/lot/tenant/" + lotId);
   },
 
-  getFeeForTicket: function(lotId, ticket) {
+  getTenantPaymentInfo: function(lotId, ticket) {
     console.log("INSIDE GETFEEFORTICKET");
     console.log("lotId is:", lotId);
     console.log("ticket is:", ticket);
