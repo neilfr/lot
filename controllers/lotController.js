@@ -16,9 +16,18 @@ const calculateFee = tenant => {
   const remainingMinutes = duration - hours * 60;
   const formattedDuration = hours + " hours " + remainingMinutes + " minutes";
   console.log("FORMATTED DURATION IS:", formattedDuration);
-
-  const fee = 100;
-  return fee;
+  if (duration <= 60) {
+    console.log("duration was less than 60");
+    return 3;
+  }
+  if (duration <= 180) {
+    console.log("duration was less than 180");
+    return 4.5;
+  }
+  if (duration <= 360) {
+    return 6.75;
+  }
+  return 10.12;
 };
 // Defining methods for the lotController
 module.exports = {
@@ -85,9 +94,11 @@ module.exports = {
     const ticket = req.params.ticket;
     console.log("req.params.lotid is:", req.params.lotId);
     const lotId = req.params.lotId;
-    db.Lot.findById(lotId, function(err, res) {
-      console.log("res is:", res);
-      const tenants = res.tenants;
+    let fee = 0;
+
+    db.Lot.findById(lotId).then(lot => {
+      console.log("res is:", lot);
+      const tenants = lot.tenants;
       const x = tenants.find(tenant => {
         console.log("tenant.ticket:", tenant.ticket);
         console.log("ticket:", ticket);
@@ -95,12 +106,14 @@ module.exports = {
           console.log("returning tenant:", tenant);
           const now = new Date();
           tenant.payment = Moment(now).format("YYYY-MM-DD HH:mm");
-          tenant.fee = calculateFee(tenant);
+          fee = calculateFee(tenant);
+          console.log("TENANT FEE IS:", fee);
           return tenant;
         }
       });
+      console.log("res.json(fee)", fee);
+      res.json(fee);
     });
-    res.json(100);
   },
   // this is all wrong... but may need the $pull syntax for later
   // findTenantByTicket: function(req, res) {
