@@ -16,6 +16,11 @@ router
   .put(lotController.updateTenant);
 
 router.route("/vacancies/:lotId").get(lotController.getVacancyCount);
-router.route("/ticket/:lotId/:ticket").get(lotController.getTenantPaymentInfo);
+router
+  .route("/ticket/payment/:lotId/:ticket")
+  .get(lotController.getTenantPaymentInfo);
+router
+  .route("/ticket/departure/:lotId/:ticket")
+  .post(lotController.postTenantDepatureInfo);
 
 module.exports = router;

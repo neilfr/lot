@@ -23,6 +23,9 @@ const calculateFee = tenant => {
 };
 // Defining methods for the lotController
 module.exports = {
+  test: function(req, res) {
+    console.log("hello");
+  },
   findAll: function(req, res) {
     console.log("INSIDE FIND ALL!!!!");
     db.Lot.find(req.query)
@@ -79,6 +82,59 @@ module.exports = {
       })
       .catch(err => res.status(422).json(err));
   },
+  postTenantDepatureInfo: function(req, res) {
+    console.log("INSIDE postTenantPaymentInfo");
+    console.log("req.params.ticket is:", req.params.ticket);
+    const ticket = req.params.ticket;
+    console.log("req.params.lotid is:", req.params.lotId);
+    const lotId = req.params.lotId;
+    db.Lot.findById(lotId)
+      .then(lot => {
+        console.log("res is:", lot);
+        const tenants = lot.tenants;
+        const tenant = tenants.find(tenant => {
+          console.log("tenant.ticket:", tenant.ticket);
+          console.log("ticket:", ticket);
+          if (tenant.ticket === ticket) {
+            console.log("returning tenant:", tenant);
+            const now = new Date();
+            tenant.departure = Moment(now).format("YYYY-MM-DD HH:mm");
+            // tenant.fee = calculateFee(tenant);
+            // console.log("TENANT FEE IS:", tenant.fee);
+            return tenant;
+          }
+        });
+        if (!tenant) {
+          console.log("tenant is not defined");
+          throw "invalid ticket";
+        }
+        const start = Moment.utc(tenant.payment);
+        const end = Moment.utc(tenant.departure);
+        const duration = end.diff(start, "minutes");
+        console.log("DURATION IS:", duration);
+        if (duration < 16) {
+          //update the database with departure date
+          db.Lot.findByIdAndUpdate(lotId, {
+            $pull: {
+              tenants: { ticket: ticket, departure: null }
+            }
+          }).catch(err => res.status(422).json(err));
+
+          db.Lot.findByIdAndUpdate(lotId, {
+            $push: { tenants: tenant }
+          }).catch(err => res.status(422).json(err));
+
+          console.log("tenant can leave");
+          res.json(true);
+        } else {
+          console.log("tenant cannot leave");
+          res.json(false);
+        }
+
+        // res.json(tenant);
+      })
+      .catch(err => res.status(404).json(err));
+  },
 
   getTenantPaymentInfo: function(req, res) {
     console.log("INSIDE getTenantPaymentInfo");
@@ -92,7 +148,7 @@ module.exports = {
       .then(lot => {
         console.log("res is:", lot);
         const tenants = lot.tenants;
-        const x = tenants.find(tenant => {
+        const tenant = tenants.find(tenant => {
           console.log("tenant.ticket:", tenant.ticket);
           console.log("ticket:", ticket);
           if (tenant.ticket === ticket) {
@@ -104,25 +160,15 @@ module.exports = {
             return tenant;
           }
         });
-        if (!x) {
-          console.log("x is not defined");
+        if (!tenant) {
+          console.log("tenant is not defined");
           throw "invalid ticket";
         }
-        console.log("tenant.fee", x.fee);
-        res.json(x);
+        console.log("tenant.fee", tenant.fee);
+        res.json(tenant);
       })
       .catch(err => res.status(404).json(err));
   },
-  // this is all wrong... but may need the $pull syntax for later
-  // findTenantByTicket: function(req, res) {
-  //   console.log("IN FIND TENANT BY ID");
-  //   console.log("req.params.lotId is:", req.params.lotId);
-  //   console.log("req.params.ticket is:", req.params.ticket);
-  //   res.json("hello");
-  //   db.Lot.findByIdAndUpdate(req.params.lotId, {
-  //     $pull: { tenants: { ticket: "1571618449397" } }
-  //   });
-  // },
 
   getNewTenant: function(req, res) {
     console.log("INSIDE GETNEWTENANT!!");
@@ -144,9 +190,7 @@ module.exports = {
           };
           db.Lot.findByIdAndUpdate(
             req.params.lotId,
-            // { $push: { tenants: { newTenant } } },
             { $push: { tenants: newTenant } },
-
             () => {
               res.json(newTenant);
             }

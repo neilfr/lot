@@ -26,16 +26,23 @@ export default {
   },
 
   getNewTenant: function(lotId) {
-    console.log("INSIDE ADD TENANT");
+    console.log("INSIDE GET NEW TENANT");
     console.log("lotId is:", lotId);
     return axios.get("api/lot/tenant/" + lotId);
   },
 
   getTenantPaymentInfo: function(lotId, ticket) {
-    console.log("INSIDE GETFEEFORTICKET");
+    console.log("INSIDE GETTENANTPAYMENTINFO");
     console.log("lotId is:", lotId);
     console.log("ticket is:", ticket);
-    return axios.get("api/lot/ticket/" + lotId + "/" + ticket);
+    return axios.get("api/lot/ticket/payment/" + lotId + "/" + ticket);
+  },
+
+  postTenantDepartureInfo: function(lotId, ticket) {
+    console.log("INSIDE GETTENANTDEPARTUREINFO");
+    console.log("lotId is:", lotId);
+    console.log("ticket is:", ticket);
+    return axios.post("api/lot/ticket/departure/" + lotId + "/" + ticket);
   },
 
   updateTenant: function(lotId, tenant) {
