@@ -13,7 +13,9 @@ class Payment extends Component {
     ticket: "",
     tenant: "",
     duration: "",
-    fee: ""
+    fee: "",
+    tenantInfoRetrieved: false,
+    statusMessage: ""
   };
 
   componentDidMount() {
@@ -55,16 +57,11 @@ class Payment extends Component {
       this.state.ticket
     )
       .then(res => {
-        // console.log("tenant payment response data:", res.data);
         const tenant = res.data;
         console.log("TENANT IS:", tenant);
         const start = Moment.utc(tenant.arrival);
         const end = Moment.utc(tenant.payment);
         const duration = end.diff(start, "minutes");
-        // const s =
-        //   duration._data.hours + " hours " + duration._data.minutes + " minutes ";
-
-        // const duration = start.from(end);
         console.log("DURATION IS:", duration);
         const hours = Math.floor(duration / 60);
         const remainingMinutes = duration - hours * 60;
@@ -73,11 +70,19 @@ class Payment extends Component {
         console.log("FORMATTED DURATION IS:", formattedDuration);
         this.setState({
           fee: tenant.fee,
-          duration: formattedDuration
+          duration: formattedDuration,
+          tenantInfoRetrieved: true,
+          statusMessage: ""
         });
       })
-      .catch(err => console.log("error loading lot data"));
+      .catch(err => {
+        console.log("error retrieving ticket", err);
+        this.setState({
+          statusMessage: "Ticket not found, please try again"
+        });
+      });
   };
+  payTicket = () => {};
 
   render() {
     switch (this.state.display) {
@@ -116,8 +121,15 @@ class Payment extends Component {
               onChange={this.handleInputChange}
             />
             <button onClick={this.getTenantPaymentInfo}>Submit</button>
+            <div>{this.state.statusMessage}</div>
             <div>duration of stay:{this.state.duration}</div>
             <div>fee:{this.state.fee}</div>
+            <button
+              disabled={!this.state.tenantInfoRetrieved}
+              onClick={this.payTicket}
+            >
+              pay ticket
+            </button>
           </div>
         );
     }

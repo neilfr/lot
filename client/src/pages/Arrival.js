@@ -9,7 +9,8 @@ class Arrival extends Component {
     currentLotIndex: null,
     display: "list",
     vacancies: null,
-    tenant: null
+    tenant: null,
+    ticketIssued: false
   };
 
   componentDidMount() {
@@ -31,7 +32,7 @@ class Arrival extends Component {
       .then(res => {
         console.log("GET NEW TENANT RESPONSE");
         console.log(res.data);
-        this.setState({ tenant: res.data });
+        this.setState({ tenant: res.data, ticketIssued: true });
       })
       .then(res => {
         this.updateVacancyCount(this.state.currentLotIndex);
@@ -68,6 +69,11 @@ class Arrival extends Component {
         });
       })
       .catch(err => console.log("error getting vacancies"));
+  };
+
+  takeTicket = () => {
+    //reset screen for next entering tenant
+    this.setState({ tenant: null, ticketIssued: false });
   };
 
   render() {
@@ -118,6 +124,12 @@ class Arrival extends Component {
                 <div></div>
               )}
             </div>
+            <button
+              disabled={!this.state.ticketIssued}
+              onClick={this.takeTicket}
+            >
+              Take ticket
+            </button>
           </div>
         );
     }

@@ -7,15 +7,7 @@ const calculateFee = tenant => {
   const start = Moment.utc(tenant.arrival);
   const end = Moment.utc(tenant.payment);
   const duration = end.diff(start, "minutes");
-  // const s =
-  //   duration._data.hours + " hours " + duration._data.minutes + " minutes ";
-
-  // const duration = start.from(end);
   console.log("DURATION IS:", duration);
-  // const hours = Math.floor(duration / 60);
-  // const remainingMinutes = duration - hours * 60;
-  // const formattedDuration = hours + " hours " + remainingMinutes + " minutes";
-  // console.log("FORMATTED DURATION IS:", formattedDuration);
   if (duration <= 60) {
     console.log("duration was less than 60");
     return 3;
@@ -96,24 +88,30 @@ module.exports = {
     const lotId = req.params.lotId;
     let fee = 0;
 
-    db.Lot.findById(lotId).then(lot => {
-      console.log("res is:", lot);
-      const tenants = lot.tenants;
-      const x = tenants.find(tenant => {
-        console.log("tenant.ticket:", tenant.ticket);
-        console.log("ticket:", ticket);
-        if (tenant.ticket === ticket) {
-          console.log("returning tenant:", tenant);
-          const now = new Date();
-          tenant.payment = Moment(now).format("YYYY-MM-DD HH:mm");
-          tenant.fee = calculateFee(tenant);
-          console.log("TENANT FEE IS:", tenant.fee);
-          return tenant;
+    db.Lot.findById(lotId)
+      .then(lot => {
+        console.log("res is:", lot);
+        const tenants = lot.tenants;
+        const x = tenants.find(tenant => {
+          console.log("tenant.ticket:", tenant.ticket);
+          console.log("ticket:", ticket);
+          if (tenant.ticket === ticket) {
+            console.log("returning tenant:", tenant);
+            const now = new Date();
+            tenant.payment = Moment(now).format("YYYY-MM-DD HH:mm");
+            tenant.fee = calculateFee(tenant);
+            console.log("TENANT FEE IS:", tenant.fee);
+            return tenant;
+          }
+        });
+        if (!x) {
+          console.log("x is not defined");
+          throw "invalid ticket";
         }
-      });
-      console.log("tenant.fee", x.fee);
-      res.json(x);
-    });
+        console.log("tenant.fee", x.fee);
+        res.json(x);
+      })
+      .catch(err => res.status(404).json(err));
   },
   // this is all wrong... but may need the $pull syntax for later
   // findTenantByTicket: function(req, res) {
