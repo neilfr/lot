@@ -157,5 +157,21 @@ module.exports = {
         }
       })
       .catch(err => res.status(422).json(err));
+  },
+  updateTenant: function(req, res) {
+    console.log("inside updateTenant");
+    console.log("lotId is:", req.params.lotId);
+    const tenant = req.body;
+    console.log("tenant is:", req.body);
+
+    db.Lot.findByIdAndUpdate(req.params.lotId, {
+      $pull: {
+        tenants: { ticket: tenant.ticket, payment: null }
+      }
+    }).catch(err => res.status(422).json(err));
+
+    db.Lot.findByIdAndUpdate(req.params.lotId, {
+      $push: { tenants: tenant }
+    }).catch(err => res.status(422).json(err));
   }
 };

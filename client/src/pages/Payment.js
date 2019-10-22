@@ -13,7 +13,6 @@ class Payment extends Component {
     ticket: "",
     tenant: "",
     duration: "",
-    fee: "",
     tenantInfoRetrieved: false,
     statusMessage: ""
   };
@@ -69,7 +68,7 @@ class Payment extends Component {
           hours + " hours " + remainingMinutes + " minutes";
         console.log("FORMATTED DURATION IS:", formattedDuration);
         this.setState({
-          fee: tenant.fee,
+          tenant: tenant,
           duration: formattedDuration,
           tenantInfoRetrieved: true,
           statusMessage: ""
@@ -82,7 +81,27 @@ class Payment extends Component {
         });
       });
   };
-  payTicket = () => {};
+
+  payTicket = () => {
+    API.updateTenant(
+      this.state.lots[this.state.currentLotIndex]._id,
+      this.state.tenant
+    )
+      .then(res => {
+        console.log("res from update tenant is:", res);
+      })
+      .catch(err => {
+        console.log("error updating tenant:", err);
+      });
+    this.setState({
+      ticket: "",
+      tenant: "",
+      duration: "",
+      tenantInfoRetrieved: false,
+      statusMessage: ""
+    });
+    //refresh payment page for next exiting tenant
+  };
 
   render() {
     switch (this.state.display) {
@@ -119,11 +138,12 @@ class Payment extends Component {
               name="ticket"
               type="text"
               onChange={this.handleInputChange}
+              value={this.state.ticket}
             />
             <button onClick={this.getTenantPaymentInfo}>Submit</button>
             <div>{this.state.statusMessage}</div>
             <div>duration of stay:{this.state.duration}</div>
-            <div>fee:{this.state.fee}</div>
+            <div>fee:{this.state.tenant.fee}</div>
             <button
               disabled={!this.state.tenantInfoRetrieved}
               onClick={this.payTicket}

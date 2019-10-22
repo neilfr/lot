@@ -38,6 +38,13 @@ export default {
     return axios.get("api/lot/ticket/" + lotId + "/" + ticket);
   },
 
+  updateTenant: function(lotId, tenant) {
+    console.log("INSIDE UPDATE TENANT");
+    console.log("lotId is:", lotId);
+    console.log("tenant is:", tenant);
+    return axios.put("api/lot/tenant/" + lotId, tenant);
+  },
+
   // Gets all books
   getBooks: function() {
     return axios.get("/api/books");
