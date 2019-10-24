@@ -38,11 +38,14 @@ export default {
     return axios.get("api/lot/ticket/payment/" + lotId + "/" + ticket);
   },
 
-  postTenantDepartureInfo: function(lotId, ticket) {
-    console.log("INSIDE GETTENANTDEPARTUREINFO");
+  getPaymentConfirmation: function(lotId, ticket) {
+    console.log("INSIDE GETPAYMENTCONFIRMATION");
     console.log("lotId is:", lotId);
     console.log("ticket is:", ticket);
-    return axios.post("api/lot/ticket/departure/" + lotId + "/" + ticket);
+    // return axios.post("api/lot/test/" + lotId);
+    return axios.get(
+      "api/lot/ticket/paymentConfirmation/" + lotId + "/" + ticket
+    );
   },
 
   updateTenant: function(lotId, tenant) {

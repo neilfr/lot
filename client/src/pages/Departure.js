@@ -49,8 +49,8 @@ class Departure extends Component {
   };
 
   depart = () => {
-    console.log("get tenant departure info for ticket:", this.state.ticket);
-    API.postTenantDepartureInfo(
+    console.log("post tenant departure info for ticket:", this.state.ticket);
+    API.getPaymentConfirmation(
       this.state.lots[this.state.currentLotIndex]._id,
       this.state.ticket
     )

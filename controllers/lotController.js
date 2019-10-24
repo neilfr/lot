@@ -23,9 +23,6 @@ const calculateFee = tenant => {
 };
 // Defining methods for the lotController
 module.exports = {
-  test: function(req, res) {
-    console.log("hello");
-  },
   findAll: function(req, res) {
     console.log("INSIDE FIND ALL!!!!");
     db.Lot.find(req.query)
@@ -36,11 +33,6 @@ module.exports = {
       })
       .catch(err => res.status(422).json(err));
   },
-  // findById: function(req, res) {
-  //   db.Book.findById(req.params.id)
-  //     .then(dbModel => res.json(dbModel))
-  //     .catch(err => res.status(422).json(err));
-  // },
   create: function(req, res) {
     db.Lot.create(req.body)
       .then(dbModel => res.json(dbModel))
@@ -82,8 +74,12 @@ module.exports = {
       })
       .catch(err => res.status(422).json(err));
   },
-  postTenantDepatureInfo: function(req, res) {
-    console.log("INSIDE postTenantPaymentInfo");
+  test: function(req, res) {
+    console.log("INSIDE TEST");
+    // console.log("req.params.ticket is:", req.params.ticket);
+  },
+  getPaymentConfirmation: function(req, res) {
+    console.log("INSIDE getPaymentConfirmation");
     console.log("req.params.ticket is:", req.params.ticket);
     const ticket = req.params.ticket;
     console.log("req.params.lotid is:", req.params.lotId);
@@ -96,11 +92,11 @@ module.exports = {
           console.log("tenant.ticket:", tenant.ticket);
           console.log("ticket:", ticket);
           if (tenant.ticket === ticket) {
-            console.log("returning tenant:", tenant);
             const now = new Date();
             tenant.departure = Moment(now).format("YYYY-MM-DD HH:mm");
             // tenant.fee = calculateFee(tenant);
             // console.log("TENANT FEE IS:", tenant.fee);
+            console.log("returning tenant:", tenant);
             return tenant;
           }
         });
@@ -114,18 +110,54 @@ module.exports = {
         console.log("DURATION IS:", duration);
         if (duration < 16) {
           //update the database with departure date
-          db.Lot.findByIdAndUpdate(lotId, {
-            $pull: {
-              tenants: { ticket: ticket, departure: null }
-            }
-          }).catch(err => res.status(422).json(err));
+          const payment = {
+            lot: lotId,
+            ticket: tenant.ticket,
+            arrival: tenant.arrival,
+            payment: tenant.payment,
+            departure: tenant.departure,
+            fee: tenant.fee
+          };
+          console.log("PAYMENT IS,", payment);
+          db.Payment.create(payment)
+            .then(() => {
+              console.log("Payment made!!!!!");
+              res.json(true);
+            })
+            .then(() => {
+              db.Lot.findByIdAndUpdate(lotId, {
+                $pull: {
+                  tenants: { ticket: ticket, departure: null }
+                }
+              }).then(() => {
+                console.log("tenant can leave");
+                // res.json(true);
+              });
+            })
+            .catch(err => res.status(422).json(err));
 
-          db.Lot.findByIdAndUpdate(lotId, {
-            $push: { tenants: tenant }
-          }).catch(err => res.status(422).json(err));
+          // db.Lot.findByIdAndUpdate(lotId, {
+          //   $push: { tenants: tenant }
+          // })
+          // db.Payment.create(payment)
+          //   .then(() => {
+          //     db.Lot.findByIdAndUpdate(lotId, {
+          //       $pull: {
+          //         tenants: { ticket: ticket, departure: null }
+          //       }
+          //     }).then(() => {
+          //       console.log("tenant can leave");
+          //       res.json(true);
+          //     });
+          //     // .catch(err => res.status(422).json(err));
+          //   })
+          //   .catch(err => res.status(422).json(err));
 
-          console.log("tenant can leave");
-          res.json(true);
+          // create: function(req, res) {
+          //   db.Lot.create(req.body)
+          //     .then(dbModel => res.json(dbModel))
+          //     .catch(err => res.status(422).json(err));
+          // },
         } else {
           console.log("tenant cannot leave");
           res.json(false);

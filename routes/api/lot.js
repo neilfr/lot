@@ -20,7 +20,9 @@ router
   .route("/ticket/payment/:lotId/:ticket")
   .get(lotController.getTenantPaymentInfo);
 router
-  .route("/ticket/departure/:lotId/:ticket")
-  .post(lotController.postTenantDepatureInfo);
+  .route("/ticket/paymentConfirmation/:lotId/:ticket")
+  .get(lotController.getPaymentConfirmation);
+
+router.route("/test/").post(lotController.test);
 
 module.exports = router;
