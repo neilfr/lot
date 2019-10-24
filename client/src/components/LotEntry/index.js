@@ -12,10 +12,10 @@ export function LotEntry(props) {
         onClick={props.setCurrentLot}
         value={props.value}
       >
-        Name:{props.name}
+        Name:{props.lot.name}
         <br />
-        Capacity:{props.capacity}
-        <br />
+        {/* Capacity:{props.capacity}
+        <br /> */}
       </li>
       {/* <DeleteBtn onClick={props.deleteConsumptionLogEntry} className="col" /> */}
     </div>

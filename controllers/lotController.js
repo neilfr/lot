@@ -21,7 +21,7 @@ const calculateFee = tenant => {
   }
   return 10.12;
 };
-// Defining methods for the lotController
+
 module.exports = {
   findAll: function(req, res) {
     console.log("INSIDE FIND ALL!!!!");
@@ -40,12 +40,9 @@ module.exports = {
   },
   update: function(req, res) {
     console.log("INSIDE LOT CONTROLLER!!!!");
-    // console.log("req.params.id", req.params.id);
     console.log("req.body", req.body);
     console.log("id is", req.params.id);
     db.Lot.findOneAndUpdate({ _id: req.params.id }, req.body)
-      // db.Lot.findOneAndUpdate(req.body._id, req.body)
-
       .then(dbModel => res.json(dbModel))
       // .catch(err => res.status(422).json(err));
       .catch(err => {
@@ -76,7 +73,6 @@ module.exports = {
   },
   test: function(req, res) {
     console.log("INSIDE TEST");
-    // console.log("req.params.ticket is:", req.params.ticket);
   },
   getPaymentConfirmation: function(req, res) {
     console.log("INSIDE getPaymentConfirmation");
@@ -94,8 +90,6 @@ module.exports = {
           if (tenant.ticket === ticket) {
             const now = new Date();
             tenant.departure = Moment(now).format("YYYY-MM-DD HH:mm");
-            // tenant.fee = calculateFee(tenant);
-            // console.log("TENANT FEE IS:", tenant.fee);
             console.log("returning tenant:", tenant);
             return tenant;
           }
@@ -108,8 +102,7 @@ module.exports = {
         const end = Moment.utc(tenant.departure);
         const duration = end.diff(start, "minutes");
         console.log("DURATION IS:", duration);
-        if (duration < 16) {
-          //update the database with departure date
+        if (duration < lot.departureLeeway) {
           const payment = {
             lot: lotId,
             ticket: tenant.ticket,
@@ -135,29 +128,6 @@ module.exports = {
               });
             })
             .catch(err => res.status(422).json(err));
-
-          // db.Lot.findByIdAndUpdate(lotId, {
-          //   $push: { tenants: tenant }
-          // })
-          // db.Payment.create(payment)
-          //   .then(() => {
-          //     db.Lot.findByIdAndUpdate(lotId, {
-          //       $pull: {
-          //         tenants: { ticket: ticket, departure: null }
-          //       }
-          //     }).then(() => {
-          //       console.log("tenant can leave");
-          //       res.json(true);
-          //     });
-          //     // .catch(err => res.status(422).json(err));
-          //   })
-          //   .catch(err => res.status(422).json(err));
-
-          // create: function(req, res) {
-          //   db.Lot.create(req.body)
-          //     .then(dbModel => res.json(dbModel))
-          //     .catch(err => res.status(422).json(err));
-          // },
         } else {
           console.log("tenant cannot leave");
           res.json(false);
