@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
-import Moment from "moment";
 
 class Departure extends Component {
   state = {

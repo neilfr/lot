@@ -3,7 +3,6 @@ import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import Moment from "moment";
-// const Moment = require("moment");
 
 class Payment extends Component {
   state = {
