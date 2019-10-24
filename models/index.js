@@ -1,5 +1,6 @@
 module.exports = {
-  Book: require("./book"),
   Lot: require("./lot"),
-  Payment: require("./payment")
+  Payment: require("./payment"),
+  Tenant: require("./tenant"),
+  FeeTier: require("./feeTier")
 };

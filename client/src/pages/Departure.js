@@ -72,7 +72,8 @@ class Departure extends Component {
       .catch(err => {
         console.log("error retrieving ticket", err);
         this.setState({
-          statusMessage: "Ticket not found, please try again"
+          statusMessage:
+            "Ticket not found, please try again or contact the office"
         });
       });
   };
