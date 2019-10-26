@@ -86,7 +86,12 @@ class Arrival extends Component {
                 <h1>Lot Picker</h1>
               </Jumbotron>
               {this.state.lots.length ? (
-                <select onChange={this.updateCurrentLot} name="currentLotIndex">
+                <select
+                  onChange={this.updateCurrentLot}
+                  name="currentLotIndex"
+                  defaultValue="empty"
+                >
+                  <option value="empty" disabled></option>
                   {this.state.lots.map((lot, index) => (
                     <option key={index} value={index}>
                       {lot.name}

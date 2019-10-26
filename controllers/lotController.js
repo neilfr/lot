@@ -47,7 +47,7 @@ module.exports = {
     // }).then(res => {
     //   console.log("created!!!!");
 
-    db.Lotdefault.findOne({ name: "rename" })
+    db.Lotdefault.findOne()
       .then(defaults => {
         const lotDefaults = {
           name: defaults.name,
