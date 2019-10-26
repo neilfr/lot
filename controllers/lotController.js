@@ -34,8 +34,36 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
-    db.Lot.create(req.body)
-      .then(dbModel => res.json(dbModel))
+    // db.Lotdefault.create({
+    //   name: "rename",
+    //   capacity: 0,
+    //   departureLeeway: 15,
+    //   feeFormula: [
+    //     { elapsedMinutes: 61, fee: 3 },
+    //     { elapsedMinutes: 181, fee: 4.5 },
+    //     { elapsedMinutes: 361, fee: 6.75 },
+    //     { elapsedMinutes: 1441, fee: 10.12 }
+    //   ]
+    // }).then(res => {
+    //   console.log("created!!!!");
+
+    db.Lotdefault.findOne({ name: "rename" })
+      .then(defaults => {
+        const lotDefaults = {
+          name: defaults.name,
+          capacity: defaults.capacity,
+          departureLeeway: defaults.departureLeeway,
+          feeFormula: defaults.feeFormula
+        };
+
+        console.log("lotDefaults:", lotDefaults);
+        db.Lot.create(lotDefaults)
+          .then(dbModel => {
+            console.log("dbModel is:", dbModel);
+            res.json(dbModel);
+          })
+          .catch(err => console.log(err));
+      })
       .catch(err => res.status(422).json(err));
   },
   update: function(req, res) {
