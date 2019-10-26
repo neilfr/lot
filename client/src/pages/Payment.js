@@ -100,6 +100,7 @@ class Payment extends Component {
       tenantInfoRetrieved: false,
       statusMessage: ""
     });
+
     //refresh payment page for next exiting tenant
   };
 
@@ -112,6 +113,7 @@ class Payment extends Component {
               <Jumbotron>
                 <h1>Payment</h1>
               </Jumbotron>
+              Select lot for kiosk:
               {this.state.lots.length ? (
                 <select
                   onChange={this.updateCurrentLot}

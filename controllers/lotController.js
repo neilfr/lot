@@ -1,25 +1,18 @@
 const Moment = require("moment");
 const db = require("../models");
 
-const calculateFee = tenant => {
+const calculateFee = (tenant, feeFormula) => {
   console.log("INSIDE FEE");
   console.log("TENANT IS:", tenant);
+  console.log("FEE FORMULA IS:", feeFormula);
   const start = Moment.utc(tenant.arrival);
   const end = Moment.utc(tenant.payment);
   const duration = end.diff(start, "minutes");
   console.log("DURATION IS:", duration);
-  if (duration <= 60) {
-    console.log("duration was less than 60");
-    return 3;
-  }
-  if (duration <= 180) {
-    console.log("duration was less than 180");
-    return 4.5;
-  }
-  if (duration <= 360) {
-    return 6.75;
-  }
-  return 10.12;
+  const qualifyingFeeTier = feeFormula.find(feeTier => {
+    return duration < feeTier.elapsedMinutes;
+  });
+  return qualifyingFeeTier.fee;
 };
 
 module.exports = {
@@ -34,19 +27,6 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
-    // db.Lotdefault.create({
-    //   name: "rename",
-    //   capacity: 0,
-    //   departureLeeway: 15,
-    //   feeFormula: [
-    //     { elapsedMinutes: 61, fee: 3 },
-    //     { elapsedMinutes: 181, fee: 4.5 },
-    //     { elapsedMinutes: 361, fee: 6.75 },
-    //     { elapsedMinutes: 1441, fee: 10.12 }
-    //   ]
-    // }).then(res => {
-    //   console.log("created!!!!");
-
     db.Lotdefault.findOne()
       .then(defaults => {
         const lotDefaults = {
@@ -185,7 +165,7 @@ module.exports = {
             console.log("returning tenant:", tenant);
             const now = new Date();
             tenant.payment = Moment(now).format("YYYY-MM-DD HH:mm");
-            tenant.fee = calculateFee(tenant);
+            tenant.fee = calculateFee(tenant, lot.feeFormula);
             console.log("TENANT FEE IS:", tenant.fee);
             return tenant;
           }

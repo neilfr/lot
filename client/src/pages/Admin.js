@@ -69,54 +69,14 @@ class Admin extends Component {
       .catch(err => console.log(err));
   };
 
-  addLotEntry = () => {
-    const lotEntry = {
-      name: "update name",
-      capacity: 0,
-      //! defaults should be read in via a json file
-      feeFormula: [
-        { elapsedMinutes: 61, fee: 3 },
-        { elapsedMinutes: 181, fee: 4.5 },
-        { elapsedMinutes: 361, fee: 6.75 },
-        { elapsedMinutes: 1441, fee: 10.12 }
-      ],
-      departureLeeway: 15
-    };
-    API.addLotEntry(lotEntry).then(res => {
-      console.log("response from addLotEntry:", res.data);
-      this.setState({
-        currentLot: res.data,
-        display: "detail"
-      });
-    });
-    // .then(() => {
-    //   this.loadLotData();
-    // });
-  };
-
   createNewLot = () => {
-    const lotEntry = {
-      name: "update name",
-      capacity: 0,
-      //! defaults should be read in via a json file
-      feeFormula: [
-        { elapsedMinutes: 61, fee: 3 },
-        { elapsedMinutes: 181, fee: 4.5 },
-        { elapsedMinutes: 361, fee: 6.75 },
-        { elapsedMinutes: 1441, fee: 10.12 }
-      ],
-      departureLeeway: 15
-    };
-    API.addLotEntry(lotEntry).then(res => {
+    API.createLotEntry().then(res => {
       console.log("response from addLotEntry:", res.data);
       this.setState({
         currentLot: res.data,
         display: "detail"
       });
     });
-    // .then(() => {
-    //   this.loadLotData();
-    // });
   };
 
   updateLotEntry = () => {

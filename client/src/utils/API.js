@@ -9,9 +9,10 @@ export default {
     console.log("in api, id is:", id);
     return axios.put("/api/lot/" + id, lotEntry);
   },
-  addLotEntry: function(lotEntry) {
-    console.log("in api, add lot entry:", JSON.stringify(lotEntry));
-    return axios.post("api/lot/", lotEntry);
+  createLotEntry: function() {
+    console.log("in api, add lot entry");
+    // return axios.post("api/lot/", lotEntry);
+    return axios.post("api/lot/");
   },
   // Deletes the lot with the given id
   deleteLotEntry: function(id) {

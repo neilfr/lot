@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
+import { Test, GetLots } from "../utils/api2";
 
 class Arrival extends Component {
   state = {
@@ -15,9 +16,12 @@ class Arrival extends Component {
 
   componentDidMount() {
     this.loadLots();
+
+    console.log("test is:", Test);
   }
 
   loadLots = () => {
+    // GetLots();
     API.getLots()
       .then(res => {
         console.log("loading lot data:", res.data);
@@ -71,8 +75,8 @@ class Arrival extends Component {
       .catch(err => console.log("error getting vacancies"));
   };
 
+  //! add logic for when ticket is not taken
   takeTicket = () => {
-    //reset screen for next entering tenant
     this.setState({ tenant: null, ticketIssued: false });
   };
 
@@ -83,8 +87,9 @@ class Arrival extends Component {
           <Container fluid>
             <Col size="md-12">
               <Jumbotron>
-                <h1>Lot Picker</h1>
+                <h1>Arrival</h1>
               </Jumbotron>
+              Select lot for kiosk:
               {this.state.lots.length ? (
                 <select
                   onChange={this.updateCurrentLot}

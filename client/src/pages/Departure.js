@@ -12,7 +12,7 @@ class Departure extends Component {
     tenant: "",
     duration: "",
     tenantInfoRetrieved: false,
-    statusMessage: ""
+    statusMessage: "Gate Down"
   };
 
   componentDidMount() {
@@ -47,6 +47,18 @@ class Departure extends Component {
     });
   };
 
+  resetDeparture = () => {
+    setTimeout(() => {
+      this.setState({
+        ticket: "",
+        tenant: "",
+        duration: "",
+        tenantInfoRetrieved: false,
+        statusMessage: "Gate Down"
+      });
+    }, 3000);
+  };
+
   depart = () => {
     console.log("post tenant departure info for ticket:", this.state.ticket);
     API.getPaymentConfirmation(
@@ -75,6 +87,7 @@ class Departure extends Component {
             "Ticket not found, please try again or contact the office"
         });
       });
+    this.resetDeparture();
   };
 
   render() {
@@ -86,6 +99,7 @@ class Departure extends Component {
               <Jumbotron>
                 <h1>Departure</h1>
               </Jumbotron>
+              Select lot for kiosk:
               {this.state.lots.length ? (
                 <select
                   onChange={this.updateCurrentLot}
