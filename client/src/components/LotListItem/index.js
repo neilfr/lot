@@ -1,12 +1,11 @@
 import React from "react";
 import "./style.css";
 
-export function LotEntry(props) {
+function LotListItem(props) {
   console.log("Lot Entry props are:", props);
   return (
     <div className="row">
       {/* <li className="list-group-item col-10" onClick={props.setCurrentLogEntry}> */}
-      {console.log("props is:", props)}
       <li
         className="list-group-item col-10"
         onClick={props.onClick}
@@ -21,3 +20,5 @@ export function LotEntry(props) {
     </div>
   );
 }
+
+export default LotListItem;

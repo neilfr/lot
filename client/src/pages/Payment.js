@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
+// import { List, ListItem } from "../components/List";
+import List from "../components/List";
+import LotList from "../components/LotList";
+import LotListItem from "../components/LotListItem";
 
 import Moment from "moment";
 
@@ -110,23 +113,21 @@ class Payment extends Component {
     switch (this.state.display) {
       case "list":
         return (
-          <div fluid>
+          <div>
             <div size="md-12">
               <PageTitle>Payment</PageTitle>
-              Select lot for kiosk:
               {this.state.lots.length ? (
-                <List>
+                <LotList>
                   {this.state.lots.map((lot, index) => (
-                    <div
+                    <LotListItem
                       key={index}
+                      lot={lot}
                       onClick={() => {
                         this.updateCurrentLot(index);
                       }}
-                    >
-                      {lot.name}
-                    </div>
+                    />
                   ))}
-                </List>
+                </LotList>
               ) : (
                 <h3>No Lots, Go to Admin to Add Lots</h3>
               )}

@@ -1,11 +1,15 @@
 import React, { Component } from "react";
+import Foo from "../components/Foo";
 import DeleteBtn from "../components/DeleteBtn";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
+// import { List, ListItem } from "../components/List2";
 import { LotEntry } from "../components/LotEntry";
 import { LotForm } from "../components/LotForm";
 import PageTitle from "../components/PageTitle";
+import Button from "../components/Button";
+import List from "../components/List";
+import LotList from "../components/LotList";
 
 class Admin extends Component {
   state = {
@@ -53,10 +57,8 @@ class Admin extends Component {
     }
   };
 
-  setCurrentLot = event => {
-    console.log("event.target is:", event.target);
-    console.log("event.target.value is:", event.target.value);
-    const selectedLot = this.state.lots[event.target.value];
+  updateCurrentLot = lotIndex => {
+    const selectedLot = this.state.lots[lotIndex];
     console.log("selected lot is:", selectedLot);
     this.setState({ currentLot: selectedLot, display: "detail" });
   };
@@ -99,18 +101,19 @@ class Admin extends Component {
           <div>
             <div size="md-12">
               <PageTitle>Admin</PageTitle>
-              <button onClick={this.createNewLot}>Add New Lot</button>
+              <Button label="+" onClick={this.createNewLot} />
               {this.state.lots.length ? (
-                <List>
+                <LotList>
                   {this.state.lots.map((lot, index) => (
                     <LotEntry
                       key={lot._id}
-                      setCurrentLot={this.setCurrentLot}
                       lot={lot}
-                      value={index}
+                      onClick={() => {
+                        this.updateCurrentLot(index);
+                      }}
                     />
                   ))}
-                </List>
+                </LotList>
               ) : (
                 <h3>No Lots to Display</h3>
               )}

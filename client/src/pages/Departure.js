@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
 import { Col, Row, div } from "../components/Grid";
-import { List, ListItem } from "../components/List";
+// import { List, ListItem } from "../components/List";
+import List from "../components/List";
+import LotList from "../components/LotList";
+import LotListItem from "../components/LotListItem";
 
 class Departure extends Component {
   state = {
@@ -98,20 +101,18 @@ class Departure extends Component {
           <div>
             <div size="md-12">
               <PageTitle>Departure</PageTitle>
-              Select lot for kiosk:
               {this.state.lots.length ? (
-                <List>
+                <LotList>
                   {this.state.lots.map((lot, index) => (
-                    <div
+                    <LotListItem
                       key={index}
+                      lot={lot}
                       onClick={() => {
                         this.updateCurrentLot(index);
                       }}
-                    >
-                      {lot.name}
-                    </div>
+                    />
                   ))}
-                </List>
+                </LotList>
               ) : (
                 <h3>No Lots, Go to Admin to Add Lots</h3>
               )}

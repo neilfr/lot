@@ -4,7 +4,12 @@ import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Test, GetLots } from "../utils/api2";
 import { FeeFormula } from "../components/FeeFormula";
-import { List, ListItem } from "../components/List";
+// import { List, ListItem } from "../components/List";
+import List from "../components/List";
+import ListItem from "../components/LotListItem";
+import { LotEntry } from "../components/LotEntry";
+import LotList from "../components/LotList";
+import LotListItem from "../components/LotListItem";
 
 class Arrival extends Component {
   state = {
@@ -86,18 +91,17 @@ class Arrival extends Component {
             <div size="md-12">
               <PageTitle>Arrival</PageTitle>
               {this.state.lots.length ? (
-                <List>
+                <LotList>
                   {this.state.lots.map((lot, index) => (
-                    <div
+                    <LotListItem
                       key={index}
+                      lot={lot}
                       onClick={() => {
                         this.updateCurrentLot(index);
                       }}
-                    >
-                      {lot.name}
-                    </div>
+                    />
                   ))}
-                </List>
+                </LotList>
               ) : (
                 <h3>No Lots, Go to Admin to Add Lots</h3>
               )}
