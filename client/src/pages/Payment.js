@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
-import { Col, Row, Container } from "../components/Grid";
-// import { List, ListItem } from "../components/List";
-import List from "../components/List";
 import LotList from "../components/LotList";
 import LotListItem from "../components/LotListItem";
 

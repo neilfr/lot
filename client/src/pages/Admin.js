@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import Foo from "../components/Foo";
-import DeleteBtn from "../components/DeleteBtn";
 import API from "../utils/API";
-import { Col, Row, Container } from "../components/Grid";
-// import { List, ListItem } from "../components/List2";
-import { LotEntry } from "../components/LotEntry";
-import { LotForm } from "../components/LotForm";
+import LotForm from "../components/LotForm";
 import PageTitle from "../components/PageTitle";
 import Button from "../components/Button";
-import List from "../components/List";
 import LotList from "../components/LotList";
+import LotListItem from "../components/LotListItem";
 
 class Admin extends Component {
   state = {
@@ -33,14 +28,10 @@ class Admin extends Component {
 
   handleInputChange = event => {
     const { name, value } = event.target;
-    const lotEntry = this.state.currentLot;
-    lotEntry[name] = value;
-    console.log("INHANDLEINPUTCHANGE");
-    console.log("event.target is:", event.target);
-    console.log("name is:", name);
-    console.log("value is:", value);
+    const currentLot = this.state.currentLot;
+    currentLot[name] = value;
     this.setState({
-      currentLot: lotEntry
+      currentLot: currentLot
     });
   };
 
@@ -105,7 +96,7 @@ class Admin extends Component {
               {this.state.lots.length ? (
                 <LotList>
                   {this.state.lots.map((lot, index) => (
-                    <LotEntry
+                    <LotListItem
                       key={lot._id}
                       lot={lot}
                       onClick={() => {

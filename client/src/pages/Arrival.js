@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
-import { Col, Row, Container } from "../components/Grid";
-import { Test, GetLots } from "../utils/api2";
-import { FeeFormula } from "../components/FeeFormula";
-// import { List, ListItem } from "../components/List";
-import List from "../components/List";
-import ListItem from "../components/LotListItem";
-import { LotEntry } from "../components/LotEntry";
+import FeeFormula from "../components/FeeFormula";
 import LotList from "../components/LotList";
 import LotListItem from "../components/LotListItem";
 

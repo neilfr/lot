@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-export function FeeFormula(props) {
+function FeeFormula(props) {
   return props.feeFormula ? (
     <ul>
       {props.feeFormula.map((feeTier, index) => (
@@ -12,3 +12,4 @@ export function FeeFormula(props) {
     <div>No Fee Formula</div>
   );
 }
+export default FeeFormula;

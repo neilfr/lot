@@ -1,6 +1,6 @@
 import React from "react";
 
-export function LotForm(props) {
+function LotForm(props) {
   console.log("props is: ", props);
   if (!props.lot) {
     return <div>Select a lot</div>;
@@ -47,3 +47,4 @@ export function LotForm(props) {
     );
   }
 }
+export default LotForm;
