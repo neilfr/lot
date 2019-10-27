@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
 import { Col, Row, div } from "../components/Grid";
+import { List, ListItem } from "../components/List";
 
 class Departure extends Component {
   state = {
@@ -28,9 +29,9 @@ class Departure extends Component {
       .catch(err => console.log("error loading lot data"));
   };
 
-  updateCurrentLot = event => {
+  updateCurrentLot = lotIndex => {
     console.log("setting current lot");
-    const lotIndex = event.target.value;
+    // const lotIndex = event.target.value;
     console.log("lot index is:", lotIndex);
     this.setState({
       currentLotIndex: lotIndex,
@@ -94,25 +95,23 @@ class Departure extends Component {
     switch (this.state.display) {
       case "list":
         return (
-          <div fluid>
+          <div>
             <div size="md-12">
-              <PageTitle>
-                <h1>Departure</h1>
-              </PageTitle>
+              <PageTitle>Departure</PageTitle>
               Select lot for kiosk:
               {this.state.lots.length ? (
-                <select
-                  onChange={this.updateCurrentLot}
-                  name="currentLotIndex"
-                  defaultValue="empty"
-                >
-                  <option value="empty" disabled></option>
+                <List>
                   {this.state.lots.map((lot, index) => (
-                    <option key={index} value={index}>
+                    <div
+                      key={index}
+                      onClick={() => {
+                        this.updateCurrentLot(index);
+                      }}
+                    >
                       {lot.name}
-                    </option>
+                    </div>
                   ))}
-                </select>
+                </List>
               ) : (
                 <h3>No Lots, Go to Admin to Add Lots</h3>
               )}
@@ -123,9 +122,7 @@ class Departure extends Component {
         return (
           <div>
             <PageTitle>
-              <h1>
-                Departure: {this.state.lots[this.state.currentLotIndex].name}
-              </h1>
+              Departure: {this.state.lots[this.state.currentLotIndex].name}
             </PageTitle>
             Enter Ticket:
             <input

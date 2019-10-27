@@ -4,6 +4,7 @@ import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Test, GetLots } from "../utils/api2";
 import { FeeFormula } from "../components/FeeFormula";
+import { List, ListItem } from "../components/List";
 
 class Arrival extends Component {
   state = {
@@ -57,15 +58,13 @@ class Arrival extends Component {
       .catch(err => console.log("error getting vacancies"));
   };
 
-  updateCurrentLot = event => {
+  updateCurrentLot = lotIndex => {
     console.log("setting current lot");
-    const lotIndex = event.target.value;
     console.log("lot index is:", lotIndex);
     API.getVacancyCount(this.state.lots[lotIndex]._id)
       .then(res => {
         console.log("res is:", res);
         console.log("VACANCY COUNT IS:", res.data);
-        // const vacancies = 5;
         this.setState({
           currentLotIndex: lotIndex,
           vacancies: res.data,
@@ -85,23 +84,20 @@ class Arrival extends Component {
         return (
           <div>
             <div size="md-12">
-              <PageTitle>
-                <h1>Arrival</h1>
-              </PageTitle>
-              Select lot for kiosk:
+              <PageTitle>Arrival</PageTitle>
               {this.state.lots.length ? (
-                <select
-                  onChange={this.updateCurrentLot}
-                  name="currentLotIndex"
-                  defaultValue="empty"
-                >
-                  <option value="empty" disabled></option>
+                <List>
                   {this.state.lots.map((lot, index) => (
-                    <option key={index} value={index}>
+                    <div
+                      key={index}
+                      onClick={() => {
+                        this.updateCurrentLot(index);
+                      }}
+                    >
                       {lot.name}
-                    </option>
+                    </div>
                   ))}
-                </select>
+                </List>
               ) : (
                 <h3>No Lots, Go to Admin to Add Lots</h3>
               )}
@@ -112,9 +108,7 @@ class Arrival extends Component {
         return (
           <div>
             <PageTitle>
-              <h1>
-                Arrival: {this.state.lots[this.state.currentLotIndex].name}
-              </h1>
+              Arrival: {this.state.lots[this.state.currentLotIndex].name}
             </PageTitle>
             <p>Vacancies:{this.state.vacancies}</p>
             <p>Rate Information</p>

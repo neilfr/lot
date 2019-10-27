@@ -120,9 +120,7 @@ class Admin extends Component {
       case "detail":
         return (
           <div>
-            <PageTitle>
-              <h1>Lot Update</h1>
-            </PageTitle>
+            <PageTitle>Lot Update</PageTitle>
             <LotForm
               lot={this.state.currentLot}
               onChange={this.handleInputChange}
