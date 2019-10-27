@@ -23,16 +23,12 @@ class Departure extends Component {
   loadLots = () => {
     API.getLots()
       .then(res => {
-        console.log("loading lot data:", res.data);
         this.setState({ lots: res.data });
       })
-      .catch(err => console.log("error loading lot data"));
+      .catch(err => console.log("error loading lot data:", err));
   };
 
   updateCurrentLot = lotIndex => {
-    console.log("setting current lot");
-    // const lotIndex = event.target.value;
-    console.log("lot index is:", lotIndex);
     this.setState({
       currentLotIndex: lotIndex,
       display: "detail"
@@ -40,11 +36,9 @@ class Departure extends Component {
   };
 
   handleInputChange = event => {
-    console.log("event.target.name", event.target.name);
-    console.log("event.target.value", event.target.value);
     const { name, value } = event.target;
     this.setState({
-      ticket: value
+      [name]: value
     });
   };
 
@@ -61,7 +55,6 @@ class Departure extends Component {
   };
 
   depart = () => {
-    console.log("post tenant departure info for ticket:", this.state.ticket);
     API.getPaymentConfirmation(
       this.state.lots[this.state.currentLotIndex]._id,
       this.state.ticket
@@ -95,25 +88,23 @@ class Departure extends Component {
     switch (this.state.display) {
       case "list":
         return (
-          <div>
-            <div size="md-12">
-              <PageTitle>Departure</PageTitle>
-              {this.state.lots.length ? (
-                <LotList>
-                  {this.state.lots.map((lot, index) => (
-                    <LotListItem
-                      key={index}
-                      lot={lot}
-                      onClick={() => {
-                        this.updateCurrentLot(index);
-                      }}
-                    />
-                  ))}
-                </LotList>
-              ) : (
-                <h3>No Lots, Go to Admin to Add Lots</h3>
-              )}
-            </div>
+          <div size="md-12">
+            <PageTitle>Departure</PageTitle>
+            {this.state.lots.length ? (
+              <LotList>
+                {this.state.lots.map((lot, index) => (
+                  <LotListItem
+                    key={index}
+                    lot={lot}
+                    onClick={() => {
+                      this.updateCurrentLot(index);
+                    }}
+                  />
+                ))}
+              </LotList>
+            ) : (
+              <h3>No Lots, Go to Admin to Add Lots</h3>
+            )}
           </div>
         );
       case "detail":

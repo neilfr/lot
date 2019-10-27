@@ -25,15 +25,13 @@ class Payment extends Component {
   loadLots = () => {
     API.getLots()
       .then(res => {
-        console.log("loading lot data:", res.data);
         this.setState({ lots: res.data });
       })
-      .catch(err => console.log("error loading lot data"));
+      .catch(err => console.log("error loading lot data:", err));
   };
 
   updateCurrentLot = lotIndex => {
     console.log("setting current lot");
-    // const lotIndex = event.target.value;
     console.log("lot index is:", lotIndex);
     this.setState({
       currentLotIndex: lotIndex,
@@ -42,32 +40,27 @@ class Payment extends Component {
   };
 
   handleInputChange = event => {
-    console.log("event.target.name", event.target.name);
-    console.log("event.target.value", event.target.value);
     const { name, value } = event.target;
     this.setState({
-      ticket: value
+      [name]: value
     });
   };
 
   getTenantPaymentInfo = () => {
-    console.log("get tenant payment info for ticket:", this.state.ticket);
     API.getTenantPaymentInfo(
       this.state.lots[this.state.currentLotIndex]._id,
       this.state.ticket
     )
       .then(res => {
         const tenant = res.data;
-        console.log("TENANT IS:", tenant);
-        const start = Moment.utc(tenant.arrival);
-        const end = Moment.utc(tenant.payment);
-        const duration = end.diff(start, "minutes");
-        console.log("DURATION IS:", duration);
+        const duration = Moment.utc(tenant.payment).diff(
+          Moment.utc(tenant.arrival),
+          "minutes"
+        );
         const hours = Math.floor(duration / 60);
         const remainingMinutes = duration - hours * 60;
         const formattedDuration =
           hours + " hours " + remainingMinutes + " minutes";
-        console.log("FORMATTED DURATION IS:", formattedDuration);
         this.setState({
           tenant: tenant,
           duration: formattedDuration,
@@ -88,13 +81,9 @@ class Payment extends Component {
     API.updateTenant(
       this.state.lots[this.state.currentLotIndex]._id,
       this.state.tenant
-    )
-      .then(res => {
-        console.log("res from update tenant is:", res);
-      })
-      .catch(err => {
-        console.log("error updating tenant:", err);
-      });
+    ).catch(err => {
+      console.log("error updating tenant:", err);
+    });
     this.setState({
       ticket: "",
       tenant: "",
@@ -103,7 +92,7 @@ class Payment extends Component {
       statusMessage: ""
     });
 
-    //refresh payment page for next exiting tenant
+    //TODO: handle screen refresh if 'pay ticket' is never pressed
   };
 
   render() {
