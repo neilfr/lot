@@ -16,8 +16,6 @@ class Arrival extends Component {
 
   componentDidMount() {
     this.loadLots();
-
-    console.log("test is:", Test);
   }
 
   loadLots = () => {
@@ -30,6 +28,7 @@ class Arrival extends Component {
       .catch(err => console.log("error loading lot data"));
   };
 
+  //Todo: reset if ticket not taken (takeTicket) within 10 seconds of ticket issue
   ticketPlease = () => {
     console.log("INSIDE TICKET PLEASE");
     API.getNewTenant(this.state.lots[this.state.currentLotIndex]._id)
@@ -75,7 +74,6 @@ class Arrival extends Component {
       .catch(err => console.log("error getting vacancies"));
   };
 
-  //! add logic for when ticket is not taken
   takeTicket = () => {
     this.setState({ tenant: null, ticketIssued: false });
   };

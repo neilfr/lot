@@ -22,6 +22,7 @@ export function LotForm(props) {
           type="number"
           defaultValue={props.lot.capacity}
           onChange={props.onChange}
+          min="0"
         />
         <br />
         Departure Leeway
@@ -30,6 +31,7 @@ export function LotForm(props) {
           type="number"
           defaultValue={props.lot.departureLeeway}
           onChange={props.onChange}
+          min="5"
         />
         <br />
         <button onClick={props.updateLotEntry}>Save</button>

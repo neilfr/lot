@@ -14,7 +14,6 @@ router
   .route("/api/lot/tenant/:lotId")
   .get(lotController.getNewTenant)
   .put(lotController.updateTenant);
-
 router.route("/api/lot/vacancies/:lotId").get(lotController.getVacancyCount);
 router
   .route("/api/lot/ticket/payment/:lotId/:ticket")

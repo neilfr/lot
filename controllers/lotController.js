@@ -2,13 +2,10 @@ const Moment = require("moment");
 const db = require("../models");
 
 const calculateFee = (tenant, feeFormula) => {
-  console.log("INSIDE FEE");
-  console.log("TENANT IS:", tenant);
-  console.log("FEE FORMULA IS:", feeFormula);
-  const start = Moment.utc(tenant.arrival);
-  const end = Moment.utc(tenant.payment);
-  const duration = end.diff(start, "minutes");
-  console.log("DURATION IS:", duration);
+  const duration = Moment.utc(tenant.payment).diff(
+    Moment.utc(tenant.arrival),
+    "minutes"
+  );
   const qualifyingFeeTier = feeFormula.find(feeTier => {
     return duration < feeTier.elapsedMinutes;
   });
@@ -17,15 +14,13 @@ const calculateFee = (tenant, feeFormula) => {
 
 module.exports = {
   findAll: function(req, res) {
-    console.log("INSIDE FIND ALL!!!!");
-    db.Lot.find(req.query)
-      .then(dbModel => {
-        console.log("getting lot data");
-        console.log("lot data is:", JSON.stringify(dbModel));
-        res.json(dbModel);
+    db.Lot.find()
+      .then(lots => {
+        res.json(lots);
       })
-      .catch(err => res.status(422).json(err));
+      .catch(err => res.status(400).json(err));
   },
+
   create: function(req, res) {
     db.Lotdefault.findOne()
       .then(defaults => {
@@ -35,53 +30,36 @@ module.exports = {
           departureLeeway: defaults.departureLeeway,
           feeFormula: defaults.feeFormula
         };
-
-        console.log("lotDefaults:", lotDefaults);
         db.Lot.create(lotDefaults)
-          .then(dbModel => {
-            console.log("dbModel is:", dbModel);
-            res.json(dbModel);
+          .then(lot => {
+            res.json(lot);
           })
-          .catch(err => console.log(err));
+          .catch(err => res.status(400).json(err));
       })
-      .catch(err => res.status(422).json(err));
+      .catch(err => res.status(400).json(err));
   },
+
   update: function(req, res) {
-    console.log("INSIDE LOT CONTROLLER!!!!");
-    console.log("req.body", req.body);
-    console.log("id is", req.params.id);
     db.Lot.findOneAndUpdate({ _id: req.params.id }, req.body)
-      .then(dbModel => res.json(dbModel))
-      // .catch(err => res.status(422).json(err));
-      .catch(err => {
-        console.log("error!");
-        console.log("err is:", err);
-        res.status(422).json(err);
-      });
+      .then(lot => res.json(lot))
+      .catch(err => res.status(400).json(err));
   },
 
   remove: function(req, res) {
     db.Lot.findById({ _id: req.params.id })
-      .then(dbModel => dbModel.remove())
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+      .then(lot => lot.remove())
+      .then(lot => res.json(lot))
+      .catch(err => res.status(400).json(err));
   },
 
   getVacancyCount: function(req, res) {
-    console.log("In GETVACANCY COUNT");
     db.Lot.findById(req.params.lotId, "capacity tenants")
       .then(lot => {
-        console.log("RES IS:", lot);
-        console.log("CAPACITY IS:", lot.capacity);
-        console.log("TENANTS IS:", lot.tenants);
-        const vacancies = lot.capacity - lot.tenants.length;
-        res.json(vacancies);
+        res.json(lot.capacity - lot.tenants.length);
       })
-      .catch(err => res.status(422).json(err));
+      .catch(err => res.status(400).json(err));
   },
-  test: function(req, res) {
-    console.log("INSIDE TEST");
-  },
+
   getPaymentConfirmation: function(req, res) {
     console.log("INSIDE getPaymentConfirmation");
     console.log("req.params.ticket is:", req.params.ticket);
@@ -91,13 +69,11 @@ module.exports = {
     db.Lot.findById(lotId)
       .then(lot => {
         console.log("res is:", lot);
-        const tenants = lot.tenants;
-        const tenant = tenants.find(tenant => {
+        const tenant = lot.tenants.find(tenant => {
           console.log("tenant.ticket:", tenant.ticket);
           console.log("ticket:", ticket);
           if (tenant.ticket === ticket) {
-            const now = new Date();
-            tenant.departure = Moment(now).format("YYYY-MM-DD HH:mm");
+            tenant.departure = Moment(new Date()).format("YYYY-MM-DD HH:mm");
             console.log("returning tenant:", tenant);
             return tenant;
           }
@@ -106,9 +82,10 @@ module.exports = {
           console.log("tenant is not defined");
           throw "invalid ticket";
         }
-        const start = Moment.utc(tenant.payment);
-        const end = Moment.utc(tenant.departure);
-        const duration = end.diff(start, "minutes");
+        const duration = Moment.utc(tenant.departure).diff(
+          Moment.utc(tenant.payment),
+          "minutes"
+        );
         console.log("DURATION IS:", duration);
         if (duration < lot.departureLeeway) {
           const payment = {
@@ -135,7 +112,7 @@ module.exports = {
                 // res.json(true);
               });
             })
-            .catch(err => res.status(422).json(err));
+            .catch(err => res.status(400).json(err));
         } else {
           console.log("tenant cannot leave");
           res.json(false);
@@ -143,41 +120,27 @@ module.exports = {
 
         // res.json(tenant);
       })
-      .catch(err => res.status(404).json(err));
+      .catch(err => res.status(400).json(err));
   },
 
   getTenantPaymentInfo: function(req, res) {
-    console.log("INSIDE getTenantPaymentInfo");
-    console.log("req.params.ticket is:", req.params.ticket);
-    const ticket = req.params.ticket;
-    console.log("req.params.lotid is:", req.params.lotId);
-    const lotId = req.params.lotId;
-    let fee = 0;
-
-    db.Lot.findById(lotId)
+    db.Lot.findById(req.params.lotId)
       .then(lot => {
-        console.log("res is:", lot);
-        const tenants = lot.tenants;
-        const tenant = tenants.find(tenant => {
-          console.log("tenant.ticket:", tenant.ticket);
-          console.log("ticket:", ticket);
-          if (tenant.ticket === ticket) {
-            console.log("returning tenant:", tenant);
-            const now = new Date();
-            tenant.payment = Moment(now).format("YYYY-MM-DD HH:mm");
+        const tenant = lot.tenants.find(tenant => {
+          if (tenant.ticket === req.params.ticket) {
+            tenant.payment = Moment(new Date()).format("YYYY-MM-DD HH:mm");
             tenant.fee = calculateFee(tenant, lot.feeFormula);
-            console.log("TENANT FEE IS:", tenant.fee);
             return tenant;
           }
         });
         if (!tenant) {
-          console.log("tenant is not defined");
           throw "invalid ticket";
         }
-        console.log("tenant.fee", tenant.fee);
         res.json(tenant);
       })
-      .catch(err => res.status(404).json(err));
+      .catch(err => {
+        res.status(400).json(err);
+      });
   },
 
   getNewTenant: function(req, res) {
@@ -210,7 +173,7 @@ module.exports = {
           console.log("no room left");
         }
       })
-      .catch(err => res.status(422).json(err));
+      .catch(err => res.status(400).json(err));
   },
   updateTenant: function(req, res) {
     console.log("inside updateTenant");
@@ -222,10 +185,10 @@ module.exports = {
       $pull: {
         tenants: { ticket: tenant.ticket, payment: null }
       }
-    }).catch(err => res.status(422).json(err));
+    }).catch(err => res.status(400).json(err));
 
     db.Lot.findByIdAndUpdate(req.params.lotId, {
       $push: { tenants: tenant }
-    }).catch(err => res.status(422).json(err));
+    }).catch(err => res.status(400).json(err));
   }
 };
