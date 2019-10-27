@@ -8,7 +8,8 @@ const lotdefaultSchema = new Schema({
   feeFormula: [
     {
       elapsedMinutes: Number,
-      fee: Number
+      fee: Number,
+      description: String
     }
   ]
 });

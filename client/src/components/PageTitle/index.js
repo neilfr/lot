@@ -1,8 +1,8 @@
 import React from "react";
 import "./style.css";
 
-function Jumbotron({ children }) {
+function PageTitle({ children }) {
   return <h1 className="bg-primary text-white">{children}</h1>;
 }
 
-export default Jumbotron;
+export default PageTitle;

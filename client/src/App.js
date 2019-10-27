@@ -12,7 +12,8 @@ function App() {
       <div>
         <Nav />
         <Switch>
-          <Route exact path="/" component={Admin} />
+          {/* <Route exact path="/" component={Admin} /> */}
+          {/* <Redirect exact from="/" to="/admin" component={Admin} /> */}
           <Route exact path="/admin" component={Admin} />
           <Route exact path="/arrival" component={Arrival} />
           <Route exact path="/departure" component={Departure} />

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import DeleteBtn from "../components/DeleteBtn";
-import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { LotEntry } from "../components/LotEntry";
 import { LotForm } from "../components/LotForm";
+import PageTitle from "../components/PageTitle";
 
 class Admin extends Component {
   state = {
@@ -96,11 +96,9 @@ class Admin extends Component {
     switch (this.state.display) {
       case "list":
         return (
-          <Container fluid>
-            <Col size="md-12">
-              <Jumbotron>
-                <h1>Lot List</h1>
-              </Jumbotron>
+          <div>
+            <div size="md-12">
+              <PageTitle>Admin</PageTitle>
               <button onClick={this.createNewLot}>Add New Lot</button>
               {this.state.lots.length ? (
                 <List>
@@ -116,15 +114,15 @@ class Admin extends Component {
               ) : (
                 <h3>No Lots to Display</h3>
               )}
-            </Col>
-          </Container>
+            </div>
+          </div>
         );
       case "detail":
         return (
           <div>
-            <Jumbotron>
+            <PageTitle>
               <h1>Lot Update</h1>
-            </Jumbotron>
+            </PageTitle>
             <LotForm
               lot={this.state.currentLot}
               onChange={this.handleInputChange}

@@ -4,6 +4,7 @@
     paddingTop: 10,
     textAlign: "center" */
   clear: "both";
-  padding: 1em;
+  padding: 0;
+  margin: 0;
   text-align: "center";
 }

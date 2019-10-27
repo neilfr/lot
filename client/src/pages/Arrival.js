@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import Jumbotron from "../components/Jumbotron";
+import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Test, GetLots } from "../utils/api2";
+import { FeeFormula } from "../components/FeeFormula";
 
 class Arrival extends Component {
   state = {
@@ -37,10 +38,10 @@ class Arrival extends Component {
         console.log(res.data);
         this.setState({ tenant: res.data, ticketIssued: true });
       })
-      .then(res => {
+      .then(() => {
         this.updateVacancyCount(this.state.currentLotIndex);
       })
-      .catch(err => console.log("error getting ticket"));
+      .catch(err => console.log("error getting ticket", err));
   };
 
   updateVacancyCount = lotIndex => {
@@ -82,11 +83,11 @@ class Arrival extends Component {
     switch (this.state.display) {
       case "list":
         return (
-          <Container fluid>
-            <Col size="md-12">
-              <Jumbotron>
+          <div>
+            <div size="md-12">
+              <PageTitle>
                 <h1>Arrival</h1>
-              </Jumbotron>
+              </PageTitle>
               Select lot for kiosk:
               {this.state.lots.length ? (
                 <select
@@ -104,18 +105,26 @@ class Arrival extends Component {
               ) : (
                 <h3>No Lots, Go to Admin to Add Lots</h3>
               )}
-            </Col>
-          </Container>
+            </div>
+          </div>
         );
       case "detail":
         return (
           <div>
-            <Jumbotron>
-              <h1>Arrival: Lot selected</h1>
-              {this.state.lots[this.state.currentLotIndex].name}
-            </Jumbotron>
+            <PageTitle>
+              <h1>
+                Arrival: {this.state.lots[this.state.currentLotIndex].name}
+              </h1>
+            </PageTitle>
             <p>Vacancies:{this.state.vacancies}</p>
-            <p>rate information</p>
+            <p>Rate Information</p>
+            <FeeFormula
+              feeFormula={
+                this.state.lots[this.state.currentLotIndex].feeFormula
+              }
+              listField="description"
+            />
+
             <button
               disabled={!(this.state.vacancies > 0)}
               onClick={this.ticketPlease}

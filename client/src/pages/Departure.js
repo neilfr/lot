@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Jumbotron from "../components/Jumbotron";
+import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
-import { Col, Row, Container } from "../components/Grid";
+import { Col, Row, div } from "../components/Grid";
 
 class Departure extends Component {
   state = {
@@ -94,11 +94,11 @@ class Departure extends Component {
     switch (this.state.display) {
       case "list":
         return (
-          <Container fluid>
-            <Col size="md-12">
-              <Jumbotron>
+          <div fluid>
+            <div size="md-12">
+              <PageTitle>
                 <h1>Departure</h1>
-              </Jumbotron>
+              </PageTitle>
               Select lot for kiosk:
               {this.state.lots.length ? (
                 <select
@@ -116,16 +116,17 @@ class Departure extends Component {
               ) : (
                 <h3>No Lots, Go to Admin to Add Lots</h3>
               )}
-            </Col>
-          </Container>
+            </div>
+          </div>
         );
       case "detail":
         return (
           <div>
-            <Jumbotron>
-              <h1>Departure: Lot selected</h1>
-              {this.state.lots[this.state.currentLotIndex].name}
-            </Jumbotron>
+            <PageTitle>
+              <h1>
+                Departure: {this.state.lots[this.state.currentLotIndex].name}
+              </h1>
+            </PageTitle>
             Enter Ticket:
             <input
               name="ticket"

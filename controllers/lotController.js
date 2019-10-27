@@ -117,8 +117,6 @@ module.exports = {
           console.log("tenant cannot leave");
           res.json(false);
         }
-
-        // res.json(tenant);
       })
       .catch(err => res.status(400).json(err));
   },
@@ -144,16 +142,9 @@ module.exports = {
   },
 
   getNewTenant: function(req, res) {
-    console.log("INSIDE GETNEWTENANT!!");
-    console.log("REQ.PARAMS.ID IS:", req.params.lotId);
-
-    db.Lot.findById(req.params.lotId, "capacity tenants")
+    db.Lot.findById(req.params.lotId)
       .then(lot => {
-        console.log("RES IS:", lot);
-        console.log("CAPACITY IS:", lot.capacity);
-        console.log("TENANTS IS:", lot.tenants);
-        const vacancies = lot.capacity - lot.tenants.length;
-        if (vacancies > 0) {
+        if (lot.capacity - lot.tenants.length > 0) {
           const now = new Date();
           const newTenant = {
             ticket: Moment(now).format("x"),
@@ -167,26 +158,20 @@ module.exports = {
             () => {
               res.json(newTenant);
             }
-          );
+          ).catch(err => res.status(400).json(err));
         } else {
           res.json(null);
-          console.log("no room left");
         }
       })
       .catch(err => res.status(400).json(err));
   },
   updateTenant: function(req, res) {
-    console.log("inside updateTenant");
-    console.log("lotId is:", req.params.lotId);
     const tenant = req.body;
-    console.log("tenant is:", req.body);
-
     db.Lot.findByIdAndUpdate(req.params.lotId, {
       $pull: {
         tenants: { ticket: tenant.ticket, payment: null }
       }
     }).catch(err => res.status(400).json(err));
-
     db.Lot.findByIdAndUpdate(req.params.lotId, {
       $push: { tenants: tenant }
     }).catch(err => res.status(400).json(err));
