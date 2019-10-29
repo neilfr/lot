@@ -23,18 +23,20 @@ export default {
   getVacancyCount: function(lotId) {
     console.log("INSIDE GET VACANCY COUNT:");
     console.log("lotId is:", lotId);
-    return axios.get("api/lot/vacancies/" + lotId);
+    return axios.get("api/lot/getVacancyCount/" + lotId);
   },
   getNewTenant: function(lotId) {
     console.log("INSIDE GET NEW TENANT");
     console.log("lotId is:", lotId);
-    return axios.get("api/lot/tenant/" + lotId);
+    return axios.get("api/lot/getNewTenant/" + lotId);
   },
   getTenantPaymentInfo: function(lotId, ticket) {
     console.log("INSIDE GETTENANTPAYMENTINFO");
     console.log("lotId is:", lotId);
     console.log("ticket is:", ticket);
-    return axios.get("api/lot/ticket/payment/" + lotId + "/" + ticket);
+    return axios.get(
+      "api/lot/ticket/getTenantPaymentInfo/" + lotId + "/" + ticket
+    );
   },
   getPaymentConfirmation: function(lotId, ticket) {
     console.log("INSIDE GETPAYMENTCONFIRMATION");
@@ -48,6 +50,6 @@ export default {
     console.log("INSIDE API PAYTICKET");
     console.log("lotId is:", lotId);
     console.log("tenant is:", tenant);
-    return axios.put("api/lot/tenant/" + lotId, tenant);
+    return axios.put("api/lot/payTicket/" + lotId, tenant);
   }
 };

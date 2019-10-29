@@ -10,13 +10,13 @@ router
   .route("/api/lot/:id")
   .put(lotController.update)
   .delete(lotController.remove);
+router.route("/api/lot/getNewTenant/:lotId").get(lotController.getNewTenant);
+router.route("/api/lot/payTicket/:lotId").put(lotController.payTicket);
 router
-  .route("/api/lot/tenant/:lotId")
-  .get(lotController.getNewTenant)
-  .put(lotController.payTicket);
-router.route("/api/lot/vacancies/:lotId").get(lotController.getVacancyCount);
+  .route("/api/lot/getVacancyCount/:lotId")
+  .get(lotController.getVacancyCount);
 router
-  .route("/api/lot/ticket/payment/:lotId/:ticket")
+  .route("/api/lot/ticket/getTenantPaymentInfo/:lotId/:ticket")
   .get(lotController.getTenantPaymentInfo);
 router
   .route("/api/lot/ticket/paymentConfirmation/:lotId/:ticket")
