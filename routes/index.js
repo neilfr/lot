@@ -13,7 +13,7 @@ router
 router
   .route("/api/lot/tenant/:lotId")
   .get(lotController.getNewTenant)
-  .put(lotController.updateTenant);
+  .put(lotController.payTicket);
 router.route("/api/lot/vacancies/:lotId").get(lotController.getVacancyCount);
 router
   .route("/api/lot/ticket/payment/:lotId/:ticket")

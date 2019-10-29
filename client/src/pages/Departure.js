@@ -3,6 +3,7 @@ import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
 import LotList from "../components/LotList";
 import LotListItem from "../components/LotListItem";
+import "./style.css";
 
 class Departure extends Component {
   state = {
@@ -113,15 +114,19 @@ class Departure extends Component {
             <PageTitle>
               Departure: {this.state.lots[this.state.currentLotIndex].name}
             </PageTitle>
-            Enter Ticket:
-            <input
-              name="ticket"
-              type="text"
-              onChange={this.handleInputChange}
-              value={this.state.ticket}
-            />
-            <button onClick={this.depart}>Submit</button>
-            <div>{this.state.statusMessage}</div>
+            <div className="grid-container bg-primary text-white">
+              <label>Ticket #:</label>
+              <input
+                name="ticket"
+                type="text"
+                onChange={this.handleInputChange}
+                value={this.state.ticket}
+              />
+            </div>
+            <button className="btn btn-primary" onClick={this.depart}>
+              Submit
+            </button>
+            <div className="statusMsg"> {this.state.statusMessage}</div>
           </div>
         );
     }

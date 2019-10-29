@@ -1,4 +1,5 @@
 import React from "react";
+import "./style.css";
 
 function LotForm(props) {
   console.log("props is: ", props);
@@ -7,42 +8,50 @@ function LotForm(props) {
   } else {
     return (
       <div>
-        <br />
-        Name
-        <input
-          name="name"
-          type="text"
-          defaultValue={props.lot.name}
-          onChange={props.onChange}
-        />
-        <br />
-        Capacity
-        <input
-          name="capacity"
-          type="number"
-          defaultValue={props.lot.capacity}
-          onChange={props.onChange}
-          min="0"
-        />
-        <br />
-        Departure Leeway
-        <input
-          name="departureLeeway"
-          type="number"
-          defaultValue={props.lot.departureLeeway}
-          onChange={props.onChange}
-          min="5"
-        />
-        <br />
-        <button onClick={props.updateLotEntry}>Save</button>
-        <button onClick={props.cancelClick}>Cancel</button>
-        <button
-          onClick={() => {
-            props.deleteClick(props.lot);
-          }}
-        >
-          Delete
-        </button>
+        <div className="grid-container bg-primary text-white">
+          <label className="grid-item">Name:</label>
+          <input
+            className="grid-item"
+            name="name"
+            type="text"
+            defaultValue={props.lot.name}
+            onChange={props.onChange}
+          />
+          <label className="grid-item">Capacity:</label>
+          <input
+            className="grid-item"
+            name="capacity"
+            type="number"
+            defaultValue={props.lot.capacity}
+            onChange={props.onChange}
+            min="0"
+          />
+          <label className="grid-item">Departure Leeway:</label>
+          <input
+            className="grid-item"
+            name="departureLeeway"
+            type="number"
+            defaultValue={props.lot.departureLeeway}
+            onChange={props.onChange}
+            min="5"
+          />
+        </div>
+        <div className="flex-container">
+          <button className="btn btn-primary" onClick={props.updateLotEntry}>
+            Save
+          </button>
+          <button className="btn btn-secondary" onClick={props.cancelClick}>
+            Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              props.deleteClick(props.lot);
+            }}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     );
   }

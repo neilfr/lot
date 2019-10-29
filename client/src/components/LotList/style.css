@@ -1,0 +1,8 @@
+.listBackground {
+  border-radius: 25px;
+  background-color: #5e94e6;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  /* margin-bottom: 0.5em; */
+  padding: 1em;
+}

@@ -15,12 +15,31 @@ class Payment extends Component {
     tenant: "",
     duration: "",
     tenantInfoRetrieved: false,
-    statusMessage: ""
+    statusMessage: "",
+    fee: ""
   };
 
   componentDidMount() {
     this.loadLots();
   }
+
+  formatCurrency = value => {
+    const result = value.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD"
+    });
+    return result;
+  };
+
+  formatDuration = tenant => {
+    const duration = Moment.utc(tenant.payment).diff(
+      Moment.utc(tenant.arrival),
+      "minutes"
+    );
+    const hours = Math.floor(duration / 60);
+    const remainingMinutes = duration - hours * 60;
+    return hours + " hours " + remainingMinutes + " minutes";
+  };
 
   loadLots = () => {
     API.getLots()
@@ -53,19 +72,12 @@ class Payment extends Component {
     )
       .then(res => {
         const tenant = res.data;
-        const duration = Moment.utc(tenant.payment).diff(
-          Moment.utc(tenant.arrival),
-          "minutes"
-        );
-        const hours = Math.floor(duration / 60);
-        const remainingMinutes = duration - hours * 60;
-        const formattedDuration =
-          hours + " hours " + remainingMinutes + " minutes";
         this.setState({
           tenant: tenant,
-          duration: formattedDuration,
+          duration: this.formatDuration(tenant),
           tenantInfoRetrieved: true,
-          statusMessage: ""
+          statusMessage: "",
+          fee: this.formatCurrency(tenant.fee)
         });
       })
       .catch(err => {
@@ -78,7 +90,7 @@ class Payment extends Component {
   };
 
   payTicket = () => {
-    API.updateTenant(
+    API.payTicket(
       this.state.lots[this.state.currentLotIndex]._id,
       this.state.tenant
     ).catch(err => {
@@ -89,7 +101,8 @@ class Payment extends Component {
       tenant: "",
       duration: "",
       tenantInfoRetrieved: false,
-      statusMessage: ""
+      statusMessage: "",
+      fee: ""
     });
 
     //TODO: handle screen refresh if 'pay ticket' is never pressed
@@ -126,23 +139,34 @@ class Payment extends Component {
             <PageTitle>
               Payment: {this.state.lots[this.state.currentLotIndex].name}
             </PageTitle>
-            Enter Ticket:
-            <input
-              name="ticket"
-              type="text"
-              onChange={this.handleInputChange}
-              value={this.state.ticket}
-            />
-            <button onClick={this.getTenantPaymentInfo}>Submit</button>
-            <div>{this.state.statusMessage}</div>
-            <div>duration of stay:{this.state.duration}</div>
-            <div>fee:{this.state.tenant.fee}</div>
+            <div className="grid-container bg-primary text-white">
+              <label>Enter Ticket #:</label>
+              <input
+                name="ticket"
+                type="text"
+                onChange={this.handleInputChange}
+                value={this.state.ticket}
+              />
+              <label>Duration:</label>
+              <input type="text" defaultValue={this.state.duration} readOnly />
+              <label>Fee:</label>
+              <input type="text" defaultValue={this.state.fee} readOnly />
+              <div></div>
+            </div>
             <button
+              className="btn btn-primary"
+              onClick={this.getTenantPaymentInfo}
+            >
+              Submit
+            </button>
+            <button
+              className="btn btn-primary"
               disabled={!this.state.tenantInfoRetrieved}
               onClick={this.payTicket}
             >
-              pay ticket
+              Pay
             </button>
+            <div>{this.state.statusMessage}</div>
           </div>
         );
     }

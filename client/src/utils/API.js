@@ -44,8 +44,8 @@ export default {
       "api/lot/ticket/paymentConfirmation/" + lotId + "/" + ticket
     );
   },
-  updateTenant: function(lotId, tenant) {
-    console.log("INSIDE UPDATE TENANT");
+  payTicket: function(lotId, tenant) {
+    console.log("INSIDE API PAYTICKET");
     console.log("lotId is:", lotId);
     console.log("tenant is:", tenant);
     return axios.put("api/lot/tenant/" + lotId, tenant);

@@ -4,6 +4,7 @@ import API from "../utils/API";
 import FeeFormula from "../components/FeeFormula";
 import LotList from "../components/LotList";
 import LotListItem from "../components/LotListItem";
+import ArrivalCard from "../components/ArrivalCard";
 
 class Arrival extends Component {
   state = {
@@ -30,19 +31,26 @@ class Arrival extends Component {
 
   //Todo: reset if ticket not taken (takeTicket) within 10 seconds of ticket issue
   ticketPlease = () => {
+    console.log("INSIDE TICKETPLEASE");
     API.getNewTenant(this.state.lots[this.state.currentLotIndex]._id)
       .then(res => {
         this.setState({ tenant: res.data, ticketIssued: true });
       })
       .then(() => {
+        console.log("after get new tenant, before update vacancy count");
         this.updateVacancyCount(this.state.currentLotIndex);
       })
       .catch(err => console.log("error getting ticket:", err));
   };
 
   updateVacancyCount = lotIndex => {
+    console.log("INSIDE ARRIVAL:UPDATEVACANCYCOUNT");
     API.getVacancyCount(this.state.lots[lotIndex]._id)
       .then(res => {
+        console.log(
+          "INSIDE CALLBACK FROM API.GETVACANCYCOUNT,res.data:",
+          res.data
+        );
         this.setState({
           vacancies: res.data
         });
@@ -95,35 +103,30 @@ class Arrival extends Component {
             <PageTitle>
               Arrival: {this.state.lots[this.state.currentLotIndex].name}
             </PageTitle>
-            <p>Vacancies:{this.state.vacancies}</p>
-            <p>Rate Information</p>
             <FeeFormula
               feeFormula={
                 this.state.lots[this.state.currentLotIndex].feeFormula
               }
               listField="description"
             />
+            <ArrivalCard
+              vacancies={this.state.vacancies}
+              ticket={this.state.tenant ? this.state.tenant.ticket : ""}
+              arrival={this.state.tenant ? this.state.tenant.arrival : ""}
+            />
             <button
+              className="btn btn-primary"
               disabled={!(this.state.vacancies > 0)}
               onClick={this.ticketPlease}
             >
-              press for ticket
+              Press for Ticket
             </button>
-            <div>
-              {this.state.tenant ? (
-                <div>
-                  <p>ticket #:{this.state.tenant.ticket}</p>
-                  <p>ticket issued:{this.state.tenant.arrival}</p>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
             <button
+              className="btn btn-primary"
               disabled={!this.state.ticketIssued}
               onClick={this.takeTicket}
             >
-              Take ticket
+              Take Ticket
             </button>
           </div>
         );

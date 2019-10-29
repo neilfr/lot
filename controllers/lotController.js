@@ -122,6 +122,9 @@ module.exports = {
   },
 
   getTenantPaymentInfo: function(req, res) {
+    console.log("INSIDE CONTROLLER GETTENANTPAYMENTINFO");
+    console.log("lotId is:", req.params.lotId);
+    console.log("ticket is:", req.params.ticket);
     db.Lot.findById(req.params.lotId)
       .then(lot => {
         const tenant = lot.tenants.find(tenant => {
@@ -142,8 +145,10 @@ module.exports = {
   },
 
   getNewTenant: function(req, res) {
+    console.log("INSIDE CONTROLLER GETNEWTENANT");
     db.Lot.findById(req.params.lotId)
       .then(lot => {
+        console.log("lotname is:", lot.name);
         if (lot.capacity - lot.tenants.length > 0) {
           const now = new Date();
           const newTenant = {
@@ -152,9 +157,10 @@ module.exports = {
             payment: null,
             departure: null
           };
+          console.log("newTenant is:", newTenant);
           db.Lot.findByIdAndUpdate(
             req.params.lotId,
-            { $push: { tenants: newTenant } },
+            { $addToSet: { tenants: newTenant } },
             () => {
               res.json(newTenant);
             }
@@ -165,15 +171,24 @@ module.exports = {
       })
       .catch(err => res.status(400).json(err));
   },
-  updateTenant: function(req, res) {
+  payTicket: function(req, res) {
+    console.log("INSIDE PAYTICKET");
     const tenant = req.body;
-    db.Lot.findByIdAndUpdate(req.params.lotId, {
+    const lotId = req.params.lotId;
+    db.Lot.findByIdAndUpdate(lotId, {
       $pull: {
         tenants: { ticket: tenant.ticket, payment: null }
       }
-    }).catch(err => res.status(400).json(err));
-    db.Lot.findByIdAndUpdate(req.params.lotId, {
-      $push: { tenants: tenant }
-    }).catch(err => res.status(400).json(err));
+    })
+      .then(() => {
+        console.log("lotId is:", lotId);
+        console.log("tenant is:", tenant);
+        db.Lot.findByIdAndUpdate(lotId, {
+          $push: { tenants: tenant }
+        }).then(() => {
+          res.json(tenant);
+        });
+      })
+      .catch(err => res.status(400).json(err));
   }
 };

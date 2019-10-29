@@ -5,6 +5,7 @@ import PageTitle from "../components/PageTitle";
 import Button from "../components/Button";
 import LotList from "../components/LotList";
 import LotListItem from "../components/LotListItem";
+import "./style.css";
 
 class Admin extends Component {
   state = {
@@ -65,13 +66,14 @@ class Admin extends Component {
     switch (this.state.display) {
       case "list":
         return (
-          <div size="md-12">
+          <div>
             <PageTitle>Admin</PageTitle>
             <Button label="+" onClick={this.createNewLot} />
             {this.state.lots.length ? (
               <LotList>
                 {this.state.lots.map((lot, index) => (
                   <LotListItem
+                    className="lotListItem"
                     key={lot._id}
                     lot={lot}
                     onClick={() => {

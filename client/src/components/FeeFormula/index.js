@@ -3,7 +3,7 @@ import "./style.css";
 
 function FeeFormula(props) {
   return props.feeFormula ? (
-    <ul>
+    <ul className="bg-primary text-white">
       {props.feeFormula.map((feeTier, index) => (
         <li key={index}>{feeTier.description}</li>
       ))}
