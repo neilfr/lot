@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-// component is not re-rendering despite the fact that the parent state has changed
+// had to add 'key' to component to get it to render on parent state change
 function ArrivalCard(props) {
   console.log("props is: ", props);
   return (
@@ -9,6 +9,7 @@ function ArrivalCard(props) {
       <div className="grid-container bg-primary text-white">
         <label className="grid-item">Vacancies:</label>
         <input
+          key={props.vacancies}
           className="grid-item"
           name="vacancies"
           type="text"
