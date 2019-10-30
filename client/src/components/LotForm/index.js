@@ -2,7 +2,6 @@ import React from "react";
 import "./style.css";
 
 function LotForm(props) {
-  console.log("props is: ", props);
   if (!props.lot) {
     return <div>Select a lot</div>;
   } else {

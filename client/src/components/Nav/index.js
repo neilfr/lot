@@ -5,7 +5,6 @@ import "./style.css";
 function Nav() {
   return (
     <nav className="navbar navbar-expand-* navbar-dark bg-primary">
-      {/* <a className="navbar-brand">Funky Lots</a> */}
       <button
         className="navbar-toggler"
         type="button"

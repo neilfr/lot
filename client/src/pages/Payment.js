@@ -3,7 +3,6 @@ import PageTitle from "../components/PageTitle";
 import API from "../utils/API";
 import LotList from "../components/LotList";
 import LotListItem from "../components/LotListItem";
-
 import Moment from "moment";
 
 class Payment extends Component {
@@ -50,8 +49,6 @@ class Payment extends Component {
   };
 
   updateCurrentLot = lotIndex => {
-    console.log("setting current lot");
-    console.log("lot index is:", lotIndex);
     this.setState({
       currentLotIndex: lotIndex,
       display: "detail"
@@ -81,7 +78,6 @@ class Payment extends Component {
         });
       })
       .catch(err => {
-        console.log("error retrieving ticket", err);
         this.setState({
           statusMessage:
             "Ticket not found, please try again or contact the office"
@@ -139,6 +135,7 @@ class Payment extends Component {
             <PageTitle>
               Payment: {this.state.lots[this.state.currentLotIndex].name}
             </PageTitle>
+            {/* TODO: Move the below into a standardized Card component */}
             <div className="grid-container bg-primary text-white">
               <label>Enter Ticket #:</label>
               <input
@@ -148,9 +145,19 @@ class Payment extends Component {
                 value={this.state.ticket}
               />
               <label>Duration:</label>
-              <input type="text" defaultValue={this.state.duration} readOnly />
+              <input
+                type="text"
+                defaultValue={this.state.duration}
+                readOnly
+                className="readOnly"
+              />
               <label>Fee:</label>
-              <input type="text" defaultValue={this.state.fee} readOnly />
+              <input
+                type="text"
+                defaultValue={this.state.fee}
+                readOnly
+                className="readOnly"
+              />
               <div></div>
             </div>
             <button

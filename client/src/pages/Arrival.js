@@ -29,7 +29,6 @@ class Arrival extends Component {
       .catch(err => console.log("error loading lot data:", err));
   };
 
-  //Todo: reset if ticket not taken (takeTicket) within 10 seconds of ticket issue
   ticketPlease = () => {
     console.log("INSIDE TICKETPLEASE");
     API.getNewTenant(this.state.lots[this.state.currentLotIndex]._id)
@@ -109,6 +108,7 @@ class Arrival extends Component {
               }
               listField="description"
             />
+            {/* TODO: Convert ArrivalCard and buttons into standardized Card; to share with other pages */}
             <ArrivalCard
               vacancies={this.state.vacancies}
               ticket={this.state.tenant ? this.state.tenant.ticket : ""}

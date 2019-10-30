@@ -10,7 +10,7 @@ function ArrivalCard(props) {
         <label className="grid-item">Vacancies:</label>
         <input
           key={props.vacancies}
-          className="grid-item"
+          className="grid-item readOnly"
           name="vacancies"
           type="text"
           defaultValue={props.vacancies}
@@ -18,7 +18,7 @@ function ArrivalCard(props) {
         />
         <label className="grid-item">Ticket #:</label>
         <input
-          className="grid-item"
+          className="grid-item readOnly"
           name="ticket"
           type="text"
           defaultValue={props.ticket}
@@ -26,7 +26,7 @@ function ArrivalCard(props) {
         />
         <label className="grid-item">Arrived at:</label>
         <input
-          className="grid-item"
+          className="grid-item readOnly"
           name="arrival"
           type="text"
           defaultValue={props.arrival}
