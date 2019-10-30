@@ -1,5 +1,5 @@
 # Neil's Funky Lots
-- Parking lot simulation applicaton including:
+Parking lot simulation applicaton including:
 * Lot administration
 * Arrival kiosk
 * Payment kiosk
