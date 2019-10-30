@@ -22,6 +22,7 @@ We will create a new parking lot, then start and use an Arrival, Payment and Dep
 
 1.  Visit https://neilsfunkylots.heroku.com
 2.  From the home page, Click on the ‘+’ to add a new lot.
+![](screenshots/Admin1.JPG)
 3.  Enter a name, capacity (# of parking spots; pick something greater than zero) and departure leeway (how long someone has from the time they pay their ticket until the time they must drive out of the lot).
 4.  Click save.
 5.  Select Arrival from the hamburger menu.
@@ -42,10 +43,7 @@ We will create a new parking lot, then start and use an Arrival, Payment and Dep
 20.  Click “Submit”.  If the ticket # was valid and was paid, the gate will lift long enough for you to drive away!
 
 
-  ![](screenshots/booksearch.JPG)
+  
 
-## Reading List
-
-- Selected books are added to this reading list
 
   ![](screenshots/readinglist.JPG)
