@@ -55,5 +55,7 @@ We will create a new parking lot, then start and use an Arrival, Payment and Dep
 
 ## Some additional notes
 1. The application requires a "lotdefaults" collection to exist in your MongoDB, that will house some required configurable settings.  Here is a sample:
+
 ![](screenshots/LotDefaults.JPG)
+
 2. Payment history is tracked in a "payments" collection so you can do analysis and reporting on your sales performance!
