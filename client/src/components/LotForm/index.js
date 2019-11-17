@@ -8,26 +8,26 @@ function LotForm(props) {
     return (
       <div>
         <div className="grid-container bg-primary text-white">
-          <label className="grid-item">Name:</label>
+          <label className="grid-item-left">Name:</label>
           <input
-            className="grid-item"
+            className="grid-item-right"
             name="name"
             type="text"
             defaultValue={props.lot.name}
             onChange={props.onChange}
           />
-          <label className="grid-item">Capacity:</label>
+          <label className="grid-item-left">Capacity:</label>
           <input
-            className="grid-item"
+            className="grid-item-right"
             name="capacity"
             type="number"
             defaultValue={props.lot.capacity}
             onChange={props.onChange}
             min="0"
           />
-          <label className="grid-item">Departure Leeway:</label>
+          <label className="grid-item-left">Departure Leeway:</label>
           <input
-            className="grid-item"
+            className="grid-item-right"
             name="departureLeeway"
             type="number"
             defaultValue={props.lot.departureLeeway}

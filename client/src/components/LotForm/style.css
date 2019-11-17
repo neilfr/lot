@@ -7,6 +7,15 @@
   display: grid;
   grid-template-columns: 9em auto;
 }
+
+.grid-item-left {
+  max-width: 9em;
+}
+
+.grid-item-right {
+  max-width: 100%;
+}
+
 .flex-container {
   margin-left: 1em;
   margin-right: 1em;

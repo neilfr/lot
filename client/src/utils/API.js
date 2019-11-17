@@ -1,7 +1,10 @@
 import axios from "axios";
 
 export default {
-  getLots: function() {
+  // getLots: function() {
+  //   return axios.get("/api/lot");
+  // },
+  getLots: () => {
     return axios.get("/api/lot");
   },
   updateLotEntry: function(id, lotEntry) {

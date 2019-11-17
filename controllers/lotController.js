@@ -13,14 +13,20 @@ const calculateFee = (tenant, feeFormula) => {
 };
 
 module.exports = {
-  findAll: function(req, res) {
+  // findAll: function(req, res) {
+  //   db.Lot.find()
+  //     .then(lots => {
+  //       res.json(lots);
+  //     })
+  //     .catch(err => res.status(400).json(err));
+  // },
+  findAll: (req, res) => {
     db.Lot.find()
       .then(lots => {
         res.json(lots);
       })
       .catch(err => res.status(400).json(err));
   },
-
   create: function(req, res) {
     db.Lotdefault.findOne()
       .then(defaults => {
